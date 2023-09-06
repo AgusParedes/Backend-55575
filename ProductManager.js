@@ -52,8 +52,8 @@ class ProductManager {
 const productManager = new ProductManager();
 const getProducts = productManager.getProducts();
 
-productManager.addProduct("Producto 1", "Descripción del producto 1", 19.99, "imagen.jpg", "ABC123", 50);
-productManager.addProduct("Producto 2", "Descripción del producto 1", 19.99, "imagen.jpg", "ABC123", 50);
+productManager.addProduct("Producto Prueba 1", "Este es un producto prueba", 200, "sin imagen", "abc123", 25);
+productManager.addProduct("Producto Prueba 2", "Este es un producto prueba", 200, "sin imagen", "abc123", 25);
 
 console.log(getProducts)
 const ProductById = productManager.getProductById(5)
