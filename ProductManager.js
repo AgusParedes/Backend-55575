@@ -6,8 +6,8 @@ class ProductManager {
       this.path = path
    }
 
-   async RevisionCode(code) {
-      await this.getProducts(); // Asegura que los productos estén cargadosy(product => product.code !== code);
+   RevisionCode(code) {
+      return this.products.every(product => product.code !== code);
    }
 
    getProducts = async () => {
@@ -52,9 +52,9 @@ class ProductManager {
          }else{
             console.log("El code ya existe")
          }
-      }else {
-      console.log("Todos los campos son obligatorios. No se pudo agregar el producto.");
-      }
+         }else {
+            console.log("Todos los campos son obligatorios. No se pudo agregar el producto.");
+         }
          } catch (error) {
             console.log(error)
          }
@@ -124,21 +124,21 @@ const productManager = new ProductManager('./files/Productos.json');
    await productManager.addProduct("Producto Prueba 1", "Este es un producto prueba", 200, "sin imagen", "abc123", 25);
    await productManager.addProduct("Producto Prueba 2", "Este es un producto prueba", 200, "sin imagen", "abc123", 25);
 
-   const getProducts = await productManager.getProducts();
-   console.log(getProducts);
+         const getProducts = await productManager.getProducts();
+         console.log(getProducts);
 
-   const ProductById = await productManager.getProductById(1);
-   if (ProductById) {
-      console.log("Se encontraron coincidencias de la búsqueda:", ProductById);
-   }
+         const ProductById = await productManager.getProductById(1);
+         if (ProductById) {
+            console.log("Se encontraron coincidencias de la búsqueda:", ProductById);
+         }
 
-   const productIdToUpdate = 2;
-   const updatedFields = {
-      description: 'Nueva descripción del producto',
-   };
-   const updatedProduct = await productManager.updateProduct(productIdToUpdate, updatedFields);
-   console.log('Producto actualizado:', updatedProduct);
+      const productIdToUpdate = 2;
+      const updatedFields = {
+         description: 'Nueva descripción del producto',
+      };
+         const updatedProduct = await productManager.updateProduct(productIdToUpdate, updatedFields);
+         console.log('Producto actualizado:', updatedProduct);
 
-   const productIdToDelete = 1;
-   await productManager.deleteProduct(productIdToDelete);
+      const productIdToDelete = 3;
+      await productManager.deleteProduct(productIdToDelete);
 })();
