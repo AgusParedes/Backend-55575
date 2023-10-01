@@ -4,6 +4,7 @@ import { promises, existsSync } from 'fs';
 export default class ProductManager {
    constructor(path){
       this.path = path
+      this.products = [];
    }
 
    RevisionCode(code) {
@@ -26,39 +27,47 @@ export default class ProductManager {
       }
    }
 
-   addProduct = async (title, description, price, thumbnail, code, stock) => {
+   addProduct = async (title, description, code, price, status, stock, category, thumbnail) => {
       try {
-         const products = await this.getProducts()
-         if (title && description && price && thumbnail && code && stock) {
-            if (this.RevisionCode(code)){
-            const product = {
-               title,
-               description,
-               price,
-               thumbnail,
-               code,
-               stock,
-            };
-            if (products.length === 0){
-               product.id = 1;
-            }
-            else{
-               product.id = products[products.length - 1].id + 1;
-            }
-            products.push(product);
-            await promises.writeFile(this.path, JSON.stringify(products, null, '\t'));
-
-            return product;
-         }else{
-            console.log("El code ya existe")
-         }
-         }else {
+         if (!title || !description || !code || !price || !status || !stock || !category) {
             console.log("Todos los campos son obligatorios. No se pudo agregar el producto.");
+            return null;
          }
-         } catch (error) {
-            console.log(error)
+   
+         const products = await this.getProducts();
+   
+         if (!this.RevisionCode(code)) {
+            console.log("El código ya existe");
+            return null;
          }
+   
+         const product = {
+            title,
+            description,
+            code,
+            price,
+            status,
+            stock,
+            category,
+            thumbnail,
+         };
+   
+         if (products.length === 0) {
+            product.id = 1;
+         } else {
+            product.id = products[products.length - 1].id + 1;
+         }
+   
+         products.push(product);
+         await promises.writeFile(this.path, JSON.stringify(products, null, '\t'));
+         return product;
+   
+      } catch (error) {
+         console.log(error);
+         return null;
       }
+   }
+   
 
 
 getProductById = async (productId) => {
@@ -118,7 +127,6 @@ deleteProduct = async (productId) => {
 }
 
 
-const productManager = new ProductManager('./files/Productos.json');
 
 (async () => {
          // await productManager.addProduct("Producto Prueba 7", "Este es un producto prueba", 200, "sin imagen", "abc1234567", 25);
