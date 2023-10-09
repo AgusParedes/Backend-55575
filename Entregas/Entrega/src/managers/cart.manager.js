@@ -1,11 +1,14 @@
 import { promises, existsSync } from 'fs';
+import __dirname from '../utils.js';
+import path from 'path';
 
 export default class CartManager {
 
-   constructor(path){
-      this.path = path;
+   constructor(relativePath){
+      this.path = path.resolve(__dirname, relativePath);
       this.carts = [];
    }
+   
 
    async saveCart(cart){
       await promises.writeFile(this.path, JSON.stringify(cart, null, '\t'));

@@ -1,9 +1,12 @@
 import { promises, existsSync } from 'fs';
+import __dirname from '../utils.js';
+import path from 'path';
+
 
 
 export default class ProductManager {
-   constructor(path){
-      this.path = path;
+   constructor(relativePath){
+      this.path = path.resolve(__dirname, relativePath);
       this.products = [];
    }
 
