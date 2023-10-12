@@ -31,19 +31,20 @@ export default class ProductManager {
       }
    }
 
-   addProduct = async (title, description, code, price, status = true, stock, category, thumbnail = []) => {
+   addProduct = async (title, description, code, price, stock, category, thumbnail = '',status = true ) => {
       try {
-         if (thumbnail === undefined) {
-            thumbnail = [];
-         }
+
+         price = parseFloat(price);
+         stock = parseInt(stock);
+         status = true;
+         thumbnail = thumbnail ? thumbnail.split(',') : [];
+
+   
+
+
 
          if (!title || !description || !code || !price || !status || !stock || !category) {
             console.log("Todos los campos son obligatorios. No se pudo agregar el producto.");
-            return null;
-         }
-
-         if (!Array.isArray(thumbnail)) {
-            console.log("thumbnail debe ser un array de strings");
             return null;
          }
    
@@ -127,7 +128,7 @@ deleteProduct = async (productId) => {
    try {
       const products = await this.getProducts();
 
-      const productIndex = products.findIndex(product => product.id === productId);
+      const productIndex = products.findIndex(product => product.id === Number(productId));
 
       if (productIndex !== -1) {
          products.splice(productIndex, 1);

@@ -1,6 +1,17 @@
 <div>
    <div>
       <h1>Lista de Productos con websockets</h1>
+         <form id="addProductForm" style="display: flex;align-items: flex-start;gap:2px">
+            <span>Title:</span><input type="text" id="title" placeholder="Title">
+            <span>Description:</span><input type="text" id="description" placeholder="Description">
+            <span>Code:</span><input type="text" id="code" placeholder="Code">
+            <span>Price:</span><input type="number" id="price" placeholder="Price">
+            <span>Stock:</span><input type="number" id="stock" placeholder="Stock">
+            <span>Category:</span><input type="text" id="category" placeholder="Category">
+            <span>Thumbnail:</span><input type="text" id="thumbnail" placeholder="Thumbnail">
+            <button type="submit">Agregar producto</button>
+         </form>
+
       <div id="container">
       </div>
    </div>
