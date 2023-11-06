@@ -1,0 +1,20 @@
+{{#each products}}
+   <div class="product">
+         <ul>
+            <li>title: {{this.title}}</li> 
+            <li>description: {{this.description}}</li>
+            <li>code: {{this.code}}</li>
+            <li>price: ${{this.price}}</li>
+            <li>status: {{this.status}}</li>
+            <li>stock: {{this.stock}}</li>
+            <li>category: {{this.category}}</li>
+            <li>thumbnail: ["{{this.thumbnail}}"]</li>
+            <li>id: {{this._id}}</li>
+            <li>
+               <form action="http://localhost:8080/api/carts/{{../cartId}}/product/{{this._id}}" method="post">
+                  <button type="submit">Agregar al carrito</button>
+               </form>
+            </li>
+         </ul>
+   </div>
+{{/each}}

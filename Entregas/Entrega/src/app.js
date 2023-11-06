@@ -5,7 +5,8 @@ import { Server } from 'socket.io'
 import viewsRouter from './routes/views.router.js'
 import routerProducts from './routes/products.router.js';
 import routerCarts from './routes/carts.router.js';
-import ProductManager from './managers/product.manager.js';
+import Products from './dao/dbManagers/product.manager.js';
+import mongoose from 'mongoose';
 import Home from './routes/home.router.js'
 
 const app = express();
@@ -28,36 +29,42 @@ app.use('/api/products', routerProducts);
 app.use('/api/carts', routerCarts);
 app.use('/', Home); 
 
+try {
+   await mongoose.connect('mongodb+srv://paredesagustin15:Agus2203@ecommerce.ttsanlh.mongodb.net/ecommerce?retryWrites=true&w=majority');
+   console.log('DB connected');
+} catch (error) {
+   console.log(error.message);
+}
 
 
 
-
-const productManager = new ProductManager('./productos.json');
+const productManager = new Products;
 io.on('connection', async (socket) => {
    console.log('Un usuario se ha conectado');
 
    try {
-      const products = await productManager.getProducts();
+      const products = await productManager.getAll();
       io.emit("showProducts", products);
    } catch (error) {
       console.error(error);
    }
 
    socket.on('addProduct', async (productData) => {
-      const product = await productManager.addProduct(productData.title, productData.description, productData.code, productData.price, productData.stock, productData.category, productData.thumbnail);
+      const product = await productManager.save(productData);
       if (product) {
          io.emit("productAdded", product);
       } else {
-         console.log('No se pudo agregar el producto')
+         console.log('No se pudo agregar el producto', product)
       }
    });
    socket.on('deleteProduct', async (productId) => {
-
-      const deletedProduct = await productManager.deleteProduct(Number(productId));
-      if (deletedProduct) {
-         io.emit("productDeleted", productId);
-      } else {
-         console.log('No se pudo borrar el producto')
+      try {
+         const deletedProduct = await productManager.delete(productId);
+         if (deletedProduct) {
+            io.emit("productDeleted", productId);
+         }
+      } catch (error) {
+         console.log('No se pudo borrar el producto', error)
       }
    });
 

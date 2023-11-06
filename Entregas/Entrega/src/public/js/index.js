@@ -33,7 +33,7 @@ socket.on('showProducts', data => {
 
    data.forEach(prod => {
       container.innerHTML += `
-            <ul id="ul-id-${prod.id}">
+            <ul id="ul-id-${prod._id}">
                <li>title: ${prod.title}</li> 
                <li>description: ${prod.description}</li>
                <li>code: ${prod.code}</li>
@@ -42,8 +42,8 @@ socket.on('showProducts', data => {
                <li>stock: ${prod.stock}</li>
                <li>category: ${prod.category}</li>
                <li>thumbnail: ["${prod.thumbnail}"]</li>
-               <li>id: ${prod.id}</li>
-               <li><button class="deleteBtn" data-product-id="${prod.id}">Eliminar</button></li>
+               <li>id: ${prod._id}</li>
+               <li><button class="deleteBtn" data-product-id="${prod._id}">Eliminar</button></li>
             </ul>
       `;
    });
@@ -59,7 +59,7 @@ socket.on('productDeleted', productId => {
 socket.on('productAdded', prod => {
    const container = document.getElementById('container');
    container.innerHTML += `
-   <ul id="ul-id-${prod.id}">
+   <ul id="ul-id-${prod._id}">
       <li>title: ${prod.title}</li> 
       <li>description: ${prod.description}</li>
       <li>code: ${prod.code}</li>
@@ -68,8 +68,8 @@ socket.on('productAdded', prod => {
       <li>stock: ${prod.stock}</li>
       <li>category: ${prod.category}</li>
       <li>thumbnail: ["${prod.thumbnail}"]</li>
-      <li>id: ${prod.id}</li>
-      <li><button class="deleteBtn" data-product-id="${prod.id}">Eliminar</button></li>
+      <li>id: ${prod._id}</li>
+      <li><button class="deleteBtn" data-product-id="${prod._id}">Eliminar</button></li>
    </ul> 
    `;
 });
