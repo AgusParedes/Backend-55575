@@ -45,14 +45,22 @@ router.get('/', async (req, res) => {
 
 router.get('/products', async (req, res) => {
    try {
-      const products = await productManager.getAll();
+      const limit = parseInt(req.query.limit)
+      const page = parseInt(req.query.page)
+      const query = req.query.query
+      const sort = req.query.sort
+
+      const result = await productsModel.paginate(query, { limit: limit, page: page, sort: sort });
       const cartId = "6544ff9dc4c37454e83065e8";
-      console.log(products)
-      res.render('products', { products, cartId });
+      const products = result.docs.map(doc => doc.toObject());
+      console.log(products);
+      res.render('products', { products, cartId, total: result.total, limit, page });
    } catch (error) {
       res.status(500).send({ status: 'error', message: error.message });
    }
 });
+
+
 
 
 
