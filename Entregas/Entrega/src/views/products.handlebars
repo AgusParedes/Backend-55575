@@ -1,3 +1,10 @@
+<div>
+   <h1>BIENVENIDO {{user.name}}</h1>
+   <p>Email: {{user.email}}</p>
+   <p>Edad: {{user.age}}</p>
+   <p>Rol: {{user.role}}</p>
+   <a href="/api/sessions/logout"><button>Cerrar Sesion</button></a>
+</div>
 {{#each products}}
    <div class="product">
          <ul>
