@@ -1,6 +1,6 @@
 import express from 'express';
 import handlebars from 'express-handlebars';
-import __dirname from './utils.js';
+import { __dirname } from './utils.js';
 import { Server } from 'socket.io';
 import realTimeProducts from './routes/realTimerProduct.router.js';
 import routerProducts from './routes/products.router.js';
@@ -12,6 +12,8 @@ import MongoStore from 'connect-mongo';
 import session from 'express-session';
 import viewsRouter from './routes/views.router.js';
 import sessionsRouter from './routes/sessions.router.js';
+import { initializePassport } from './config/passport.config.js';
+import passport from 'passport';
 
 const app = express();
 
@@ -43,6 +45,11 @@ app.use(session({
    resave: true,
    saveUninitialized: true, 
 }));
+
+
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/realtimeproducts', realTimeProducts(io));
 app.use('/api/products', routerProducts);
