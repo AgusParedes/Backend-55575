@@ -1,17 +1,30 @@
-import { Router } from "express"
+import Router from "./router.js";
 // import ProductManager from '../managers/product.manager.js'
 import Products from '../dao/dbManagers/product.manager.js'
 import { productsModel } from '../dao/dbManagers/models/product.model.js'
+import { accessRolesEnum, passportStrategiesEnum } from '../config/enums.js';
 
+export default class CartsRouter extends Router {
+   constructor() {
+      super();
+      this.productManager = new Products();
+   }
 
-const router = Router();
-const productManager = new Products;
-
-router.get('/home', async (req, res) => {
+   init() {
+      this.get('/home', [accessRolesEnum.USER], passportStrategiesEnum.JWT, this.RenderHome);
+      this.get('/', [accessRolesEnum.USER], passportStrategiesEnum.JWT, this.GetInfoPages);
+      this.get('/products', [accessRolesEnum.USER], passportStrategiesEnum.JWT, this.RenderProductsWithQuerys);
+      this.get('/:pid', [accessRolesEnum.USER], passportStrategiesEnum.JWT, this.GetById);
+      this.post('/', [accessRolesEnum.USER], passportStrategiesEnum.JWT, this.NewProduct);
+      this.put('/:pid', [accessRolesEnum.USER], passportStrategiesEnum.JWT, this.EditProduct);
+      this.delete('/', [accessRolesEnum.USER], passportStrategiesEnum.JWT, this.DeleteProduct);
+   }   
+   
+async RenderHome (req, res) {
    res.render('home');
-   })
+}
 
-router.get('/', async (req, res) => {
+async GetInfoPages (req, res) {
    try {
       const limit = parseInt(req.query.limit) || 10;
       const page = parseInt(req.query.page) || 1;
@@ -40,10 +53,9 @@ router.get('/', async (req, res) => {
    } catch (error) {
       res.status(500).send({ status: 'error', message: error.message });
    }
-})
+}
 
-
-router.get('/products', async (req, res) => {
+async RenderProductsWithQuerys (req, res) {
    try {
       const limit = parseInt(req.query.limit) || 10;
       const page = parseInt(req.query.page) || 1;
@@ -53,31 +65,24 @@ router.get('/products', async (req, res) => {
       const result = await productsModel.paginate(query, { limit: limit, page: page, sort: sort });
       const cartId = "6544ff9dc4c37454e83065e8";
       const products = result.docs.map(doc => doc.toObject());
-      console.log(products);
       res.render('products', { products, cartId, total: result.total, limit, page });
    } catch (error) {
       res.status(500).send({ status: 'error', message: error.message });
    }
-})
+}
 
-
-
-
-
-
-router.get('/:pid', async (req, res) => {
+async GetById (req, res) {
    try{
       const { pid } = req.params;
-      const product = await productManager.getById(pid);
+      const product = await this.productManager.getById(pid);
       res.send({ status: 'success', payload: product });
    }
    catch (error) {
       res.status(500).send({ status: 'error', message: error.message });
    }
-})
+}
 
-
-router.post('/', async (req, res) => {
+async NewProduct (req, res) {
    try {
       const { title, description, code, price, status = true, stock, category, thumbnail } = req.body;
 
@@ -85,7 +90,7 @@ router.post('/', async (req, res) => {
          return res.status(400).send({ status: 'error', message: 'incomplete values' });
       }
 
-      const result = await productManager.save({
+      const result = await this.productManager.save({
          title, 
          description, 
          code, 
@@ -99,30 +104,27 @@ router.post('/', async (req, res) => {
    } catch (error) {
       res.status(500).send({ status: 'error', message: error.message });
    }
-});
+}
 
-
-
-router.put('/:pid', async (req, res) => {
+async EditProduct (req, res) {
    try {
       const { pid } = req.params;
       const updatedFields = req.body;
-      const updatedProduct = await productManager.update(pid, updatedFields);
+      const updatedProduct = await this.productManager.update(pid, updatedFields);
       res.send({ status: 'success', payload: updatedProduct });
    } catch (error) {
       res.status(500).send({ status: 'error', message: error.message });
    }
-});
+}
 
-
-router.delete('/:pid', async (req, res) => {
+async DeleteProduct (req, res) {
    try {
       const { pid } = req.params;
-      const result = await productManager.delete(pid);
+      const result = await this.productManager.delete(pid);
       res.send({ status: 'success', payload: result });
    } catch (error) {
       res.status(404).send({ status: 'error', error: 'Producto no encontrado' });
    }
-})
+}
 
-export default router
+};

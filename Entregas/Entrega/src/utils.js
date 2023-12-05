@@ -1,6 +1,8 @@
-import path from 'path'
-import { fileURLToPath } from 'url'
+import path from 'path';
+import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { PRIVATE_KEY_JWT } from './config/constants.js';
 
 
 const __filename = fileURLToPath(import.meta.url)
@@ -13,8 +15,28 @@ const createHash = password =>
 const isValidPassword =(plainPassword, hashedPassword) =>
    bcrypt.compareSync(plainPassword, hashedPassword);
 
+const generateToken = (user) => {
+   try {
+      const token = jwt.sign({ user }, PRIVATE_KEY_JWT, { expiresIn: '24h' });
+      return token;
+   } catch (error) {
+      console.error('Error en generateToken:', error);
+      throw error;
+   }
+   }
+
+
+const authorization = (role) => {
+   return async (req, res, next) => {
+      if(req.user.role !== role) return res.status(403).send({ status: 'error', message: 'not permissions' })
+      next();
+   }
+}
+
    export{
       __dirname,
       createHash,
-      isValidPassword
+      isValidPassword,
+      generateToken,
+      authorization
    } 

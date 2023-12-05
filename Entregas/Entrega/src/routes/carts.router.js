@@ -1,45 +1,48 @@
-import { Router } from "express";
+import Router from "./router.js";
 // import CartManager from "../managers/cart.manager.js";
 import Carts from "../dao/dbManagers/carts.manager.js"
 import { cartsModel } from '../dao/dbManagers/models/carts.model.js'
-import mongoose from 'mongoose';
+import { accessRolesEnum, passportStrategiesEnum } from '../config/enums.js';
 
-const router = Router();
-const cartManager = new Carts;
 
-router.post('/', async (req, res) => {
+export default class CartsRouter extends Router {
+   constructor() {
+      super();
+      this.cartManager = new Carts();
+   }
+
+   init() {
+      this.post('/', [accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, this.CreateCart);
+      this.post('/:cid/product/:pid', [accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, this.AddProductToCart);
+      this.delete('/:cid/products/:pid', [accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, this.DeleteProductToCart);
+      this.put('/:cid', [accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, this.EditCart);
+      this.put('/:cid/products/:pid', [accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, this.EditProduct);
+      this.get('/cart/:cid', [accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, this.GetCartById);
+      this.delete('/:cid', [accessRolesEnum.ADMIN], passportStrategiesEnum.JWT, this.DeleteCart);
+   }   
+   
+   
+   async CreateCart (req, res) {
    try {
-      const result = await cartManager.create({
+      const result = await this.cartManager.create({
          products: [] 
       });
-      res.status(201).send({ status: 'success', payload: result });
+      res.sendSuccessNewResourse(result);
    } catch (error) {
-      res.status(500).send({ status: 'error', message: error.message });
+      res.sendServerError (error.message);
    }
-});
+};
 
 
-
-router.get('/:cid', async (req, res) => {
-   try{
-      const { cid } = req.params;
-      const cart = await cartManager.getById(cid);
-      res.send({ status: 'success', payload: cart });
-   } catch (error) {
-      res.status(500).send({ status: 'error', message: error.message });
-   }
-})
-
-
-router.post('/:cid/product/:pid', async (req, res) => {
+async AddProductToCart (req, res) {
    try {
       const cartId = req.params.cid;
       const productId = req.params.pid; 
 
-      const cart = await cartManager.getById(cartId);
+      const cart = await this.cartManager.getById(cartId);
 
       if (!cart) {
-         return res.status(404).send({ status: 'error', message: 'Carrito no encontrado' });
+         return res.sendServerError('Carrito no encontrado');
       }
 
       const products = cart.products;
@@ -53,22 +56,21 @@ router.post('/:cid/product/:pid', async (req, res) => {
          products.push({ product: productId, quantity: 1 });
       }
 
-      await cartManager.update(cartId, products);
+      await this.cartManager.update(cartId, products);
 
-      res.send({ status: 'success', payload: cart });
+      res.sendSuccessNewResourse (cart);
    } catch (error) {
-      res.status(500).send({ status: 'error', message: error.message });
+      res.sendServerError (error.message);
    }
-});
+};
 
 
-
-router.delete('/:cid/products/:pid', async (req, res) => {
+async DeleteProductToCart (req, res) {
    try {
       const cartId = req.params.cid;
       const productId = req.params.pid;
 
-      const cart = await cartManager.getById(cartId);
+      const cart = await this.cartManager.getById(cartId);
 
       if (!cart) {
          return res.status(404).send({ status: 'error', message: 'Carrito no encontrado' });
@@ -83,37 +85,36 @@ router.delete('/:cid/products/:pid', async (req, res) => {
          products.splice(indexProductInCart, 1);
       }
 
-      await cartManager.update(cartId, products);
+      await this.cartManager.update(cartId, products);
 
-      res.send({ status: 'success', payload: cart });
+      res.sendSuccess(cart);
    } catch (error) {
-      res.status(500).send({ status: 'error', message: error.message });
+      res.sendServerError (error.message);
    }
-});
+};
 
 
-
-router.put('/:cid', async (req, res) => {
+async EditCart (req, res) {
    try {
       const cartId = req.params.cid;
       const newProducts = req.body;
 
-      await cartManager.update(cartId, newProducts);
+      await this.cartManager.update(cartId, newProducts);
 
-      res.send({ status: 'success', message: 'Carrito actualizado' });
+      res.sendSuccess('Carrito actualizado');
    } catch (error) {
       res.status(500).send({ status: 'error', message: error.message });
    }
-});
+};
 
 
-router.put('/:cid/products/:pid', async (req, res) => {
+async EditProduct (req, res) {
    try {
       const cartId = req.params.cid;
       const productId = req.params.pid;
       const newQuantity = req.body.quantity;
 
-      const cart = await cartManager.getById(cartId);
+      const cart = await this.cartManager.getById(cartId);
 
       if (!cart) {
          return res.status(404).send({ status: 'error', message: 'Carrito no encontrado' });
@@ -128,16 +129,16 @@ router.put('/:cid/products/:pid', async (req, res) => {
          products[indexProductInCart].quantity = newQuantity;
       }
 
-      await cartManager.update(cartId,  products );
+      await this.cartManager.update(cartId,  products );
 
-      res.send({ status: 'success', message: 'Cantidad de producto actualizada' });
+      res.sendSuccess('Cantidad de producto actualizada');
    } catch (error) {
-      res.status(500).send({ status: 'error', message: error.message });
+      res.sendServerError (error.message);
    }
-});
+};
 
 
-router.get('/cart/:cid', async (req, res) => {
+async GetCartById (req, res) {
    try {
       const cartId = req.params.cid;
       const cart = await cartsModel.findById(cartId).populate("products.product");
@@ -159,23 +160,39 @@ router.get('/cart/:cid', async (req, res) => {
    } catch (error) {
       res.status(500).send({ status: 'error', message: error.message });
    }
-});
+};
 
 
-
-
-router.delete('/:cid', async (req, res) => {
+async DeleteCart (req, res) {
    try {
       const cartId = req.params.cid;
 
-      await cartManager.delete(cartId);
+      await this.cartManager.delete(cartId);
 
-      res.send({ status: 'success', message: 'Carrito eliminado' });
+      res.sendSuccess('Carrito eliminado');
    } catch (error) {
-      res.status(500).send({ status: 'error', message: error.message });
+      res.sendServerError (error.message);
    }
-});
+};
+};
 
 
 
-export default router
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

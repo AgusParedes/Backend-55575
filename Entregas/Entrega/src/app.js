@@ -3,19 +3,36 @@ import handlebars from 'express-handlebars';
 import { __dirname } from './utils.js';
 import { Server } from 'socket.io';
 import realTimeProducts from './routes/realTimerProduct.router.js';
-import routerProducts from './routes/products.router.js';
-import routerCarts from './routes/carts.router.js';
+import ProductsRouter from './routes/products.router.js';
+import CartsRouter from './routes/carts.router.js';
 import Products from './dao/dbManagers/product.manager.js';
 import mongoose from 'mongoose';
 import Home from './routes/home.router.js';
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
-import viewsRouter from './routes/views.router.js';
-import sessionsRouter from './routes/sessions.router.js';
+import ViewsRouter from './routes/views.router.js';
+import SessionsRouter from './routes/sessions.router.js';
 import { initializePassport } from './config/passport.config.js';
 import passport from 'passport';
+import cookieParser from 'cookie-parser';
 
 const app = express();
+
+const cartsRouter = new CartsRouter();
+const productsRouter = new ProductsRouter();
+
+
+
+
+app.use(express.json());
+app.use(express.static(`${__dirname}/public`))
+app.use(express.urlencoded({extended:true}));
+app.use(cookieParser());
+
+
+app.engine('handlebars', handlebars.engine())
+app.set('views', `${__dirname}/views`)
+app.set('view engine', 'handlebars')
 
 try {
    await mongoose.connect('mongodb+srv://paredesagustin15:Agus2203@ecommerce.ttsanlh.mongodb.net/ecommerce?retryWrites=true&w=majority');
@@ -23,18 +40,6 @@ try {
 } catch (error) {
    console.log(error.message);
 }
-
-app.use(express.json());
-
-app.use(express.static(`${__dirname}/public`))
-app.use(express.urlencoded({extended:true}));
-
-app.engine('handlebars', handlebars.engine())
-app.set('views', `${__dirname}/views`)
-app.set('view engine', 'handlebars')
-
-const server = app.listen(8080,()=>console.log("Listening on 8080"))
-const io = new Server(server)
 
 app.use(session({
    store: MongoStore.create({
@@ -48,16 +53,22 @@ app.use(session({
 
 
 initializePassport();
+
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/realtimeproducts', realTimeProducts(io));
-app.use('/api/products', routerProducts);
-app.use('/api/carts', routerCarts);
+// app.use('/realtimeproducts', realTimeProducts(io));
+app.use('/api/products', productsRouter.getRouter());
+app.use('/api/carts', cartsRouter.getRouter());
 // app.use('/', Home); 
-app.use('/', viewsRouter);
-app.use('/api/sessions', sessionsRouter);
+app.use('/', ViewsRouter);
+app.use('/api/sessions', SessionsRouter);
 
+
+
+
+const server = app.listen(8080,()=>console.log("Listening on 8080"))
+const io = new Server(server)
 
 const productManager = new Products;
 io.on('connection', async (socket) => {
