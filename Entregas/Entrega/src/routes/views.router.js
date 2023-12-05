@@ -33,7 +33,7 @@ router.get('/', passportCall('jwt'),authorization('user'), async (req, res) => {
       const cartId = user.cart;
       const products = result.docs.map(doc => doc.toObject());
 
-      res.render('products', { products, cartId, total: result.total, limit, page, user: userData });
+      res.render('products', { products, cartId, total: result.total, limit, page, user: req.user });
    } catch (error) {
       res.status(500).send({ status: 'error', message: error.message });
    }

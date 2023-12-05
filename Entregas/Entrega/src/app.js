@@ -2,12 +2,10 @@ import express from 'express';
 import handlebars from 'express-handlebars';
 import { __dirname } from './utils.js';
 import { Server } from 'socket.io';
-import realTimeProducts from './routes/realTimerProduct.router.js';
 import ProductsRouter from './routes/products.router.js';
 import CartsRouter from './routes/carts.router.js';
 import Products from './dao/dbManagers/product.manager.js';
 import mongoose from 'mongoose';
-import Home from './routes/home.router.js';
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
 import ViewsRouter from './routes/views.router.js';
@@ -53,7 +51,6 @@ app.use(session({
 
 
 initializePassport();
-
 app.use(passport.initialize());
 app.use(passport.session());
 
