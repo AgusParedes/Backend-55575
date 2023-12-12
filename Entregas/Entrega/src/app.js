@@ -2,26 +2,20 @@ import express from 'express';
 import handlebars from 'express-handlebars';
 import { __dirname } from './utils.js';
 import { Server } from 'socket.io';
-import ProductsRouter from './routes/products.router.js';
-import CartsRouter from './routes/carts.router.js';
+import productsRouter from './routes/products.router.js'
+import cartsRouter from './routes/carts.router.js';
 import Products from './dao/dbManagers/product.manager.js';
 import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
-import ViewsRouter from './routes/views.router.js';
-import SessionsRouter from './routes/sessions.router.js';
+import viewsRouter from './routes/views.router.js';
+import sessionsRouter from './routes/sessions.router.js';
 import { initializePassport } from './config/passport.config.js';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
+import configs from "./config/config.js";
 
 const app = express();
-
-const cartsRouter = new CartsRouter();
-const productsRouter = new ProductsRouter();
-
-
-
-
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`))
 app.use(express.urlencoded({extended:true}));
@@ -33,7 +27,7 @@ app.set('views', `${__dirname}/views`)
 app.set('view engine', 'handlebars')
 
 try {
-   await mongoose.connect('mongodb+srv://paredesagustin15:Agus2203@ecommerce.ttsanlh.mongodb.net/ecommerce?retryWrites=true&w=majority');
+   await mongoose.connect(configs.mongoUrl);
    console.log('DB connected');
 } catch (error) {
    console.log(error.message);
@@ -44,7 +38,7 @@ app.use(session({
       client: mongoose.connection.getClient(),
       ttl: 3600
    }),
-   secret: 'Coder5575Secret',
+   secret: configs.sessionSecret,
    resave: true,
    saveUninitialized: true, 
 }));
@@ -55,16 +49,16 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // app.use('/realtimeproducts', realTimeProducts(io));
-app.use('/api/products', productsRouter.getRouter());
-app.use('/api/carts', cartsRouter.getRouter());
+app.use('/api/products', productsRouter);
+app.use('/api/carts', cartsRouter);
 // app.use('/', Home); 
-app.use('/', ViewsRouter);
-app.use('/api/sessions', SessionsRouter);
+app.use('/', viewsRouter);
+app.use('/api/sessions', sessionsRouter);
 
 
 
 
-const server = app.listen(8080,()=>console.log("Listening on 8080"))
+const server = app.listen(configs.port,()=>console.log("Listening on 8080"))
 const io = new Server(server)
 
 const productManager = new Products;

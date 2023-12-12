@@ -2,7 +2,7 @@ import passport from "passport";
 import local from "passport-local";
 import GitHubStrategy from 'passport-github2';
 import { usersModel } from "../dao/dbManagers/models/user.model.js";
-import { PRIVATE_KEY_JWT } from "./constants.js";
+import configs from "./config.js";
 import jwt from 'passport-jwt';
 
 
@@ -92,7 +92,7 @@ const initializePassport = () => {
 
    passport.use('jwt', new JWTSrategy({
       jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
-      secretOrKey: PRIVATE_KEY_JWT
+      secretOrKey: configs.privateKeyJwt
    }, async(jwt_payload, done) => {
          try {
             return done(null, jwt_payload.user);

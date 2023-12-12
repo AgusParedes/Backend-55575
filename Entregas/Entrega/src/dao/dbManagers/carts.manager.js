@@ -1,5 +1,4 @@
 import { cartsModel } from '../dbManagers/models/carts.model.js'
-import mongoose from 'mongoose';
 
 export default class Carts {
 
@@ -19,14 +18,9 @@ export default class Carts {
    }
 
    async create() {
-      try {
          const cart = { products: [] };
          const result = await cartsModel.create(cart);
          return result;
-      } catch (error) {
-         console.error(error);
-         throw new Error('No se pudo agregar el carrito');
-      }
    }
 
    async update(cartId, products) {

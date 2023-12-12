@@ -2,7 +2,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { PRIVATE_KEY_JWT } from './config/constants.js';
+import configs from "./config/config.js";
 
 
 const __filename = fileURLToPath(import.meta.url)
@@ -17,7 +17,7 @@ const isValidPassword =(plainPassword, hashedPassword) =>
 
 const generateToken = (user) => {
    try {
-      const token = jwt.sign({ user }, PRIVATE_KEY_JWT, { expiresIn: '24h' });
+      const token = jwt.sign({ user }, configs.privateKeyJwt , { expiresIn: '24h' });
       return token;
    } catch (error) {
       console.error('Error en generateToken:', error);
