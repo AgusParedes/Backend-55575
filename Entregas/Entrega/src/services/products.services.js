@@ -1,7 +1,9 @@
 import Products from '../dao/dbManagers/product.manager.js'
+import ProductRepository from "../repositories/product.reposity.js"
 import { productsModel } from '../dao/dbManagers/models/product.model.js'
 
-const productManager = new Products();
+const productDao = new Products();
+const productRepository = new ProductRepository(productDao);
 
 const GetInfoPages = async (limit, page, query, sort) => {
 
@@ -34,13 +36,13 @@ const RenderProductsWithQuerys = async (limit, page, query, sort, user) => {
    }
 
 const GetById = async (pid) => {
-      const product = await productManager.getById(pid);
+      const product = await productRepository.getProductById(pid);
       return product;
    }
    
 const NewProduct = async (title, description, code, price, status = true, stock, category, thumbnail) => {
    if(title || description || code || price || status || stock || category || thumbnail) {
-      const result = await productManager.save({
+      const product = {
          title, 
          description, 
          code, 
@@ -49,18 +51,19 @@ const NewProduct = async (title, description, code, price, status = true, stock,
          stock, 
          category, 
          thumbnail
-      });
+      }
+      const result = await productRepository.CreateProduct(product);
       return result;
    }
    }
 
 const EditProduct = async (pid, updatedFields) => {
-      const updatedProduct = await productManager.update(pid, updatedFields);
+      const updatedProduct = await productRepository.updateProduct(pid, updatedFields);
       return updatedProduct;
    }
 
 const DeleteProduct = async (pid) => {
-      const result = await productManager.delete(pid);
+      const result = await productRepository.deleteProduct(pid);
       return result;
    }
 

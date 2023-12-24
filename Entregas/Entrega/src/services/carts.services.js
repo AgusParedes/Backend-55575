@@ -1,66 +1,73 @@
 import Carts from "../dao/dbManagers/carts.manager.js";
+import CartRepository from "../repositories/cart.repository.js"
 
-const cartManager = new Carts();
+const cartDao = new Carts();
+const cartRepository = new CartRepository(cartDao)
 
 const CreateCart = async () => {
-   const newCart = cartManager.create();
+   const newCart = cartRepository.createCart();
    return newCart
 }
 
-const AddProductToCart = async (CartId, productId) => {
-   const cart = await cartManager.getById(CartId);
+const AddProductToCart = async (cartId, productId) => {
+   const cart = await cartRepository.getCartById(cartId);
+
    if (cart) {
       const products = cart.products;
-      const indexProductInCart = products.findIndex(product => {
-         return product.product.toString() === productId; 
-      });
 
-      if (indexProductInCart != -1) {
-         products[indexProductInCart].quantity++;
+      const productIndexInCart = products.findIndex(product => 
+         product.product && product.product.toString() === productId.toString()
+      );
+      console.log(productIndexInCart)
+
+      if (productIndexInCart !== -1) {
+         products[productIndexInCart].quantity++;
       } else {
          products.push({ product: productId, quantity: 1 });
       }
-      await cartManager.update(CartId, products);
+      await cartRepository.updateCart(cartId, products);
    }
-   return cart
-}
+   return cart;
+};
+
+
 
 const DeleteProductToCart = async (CartId, productId) => {
-   const cart = await cartManager.getById(CartId);
+   const cart = await cartRepository.getCartById(CartId);
    if (cart) {
       const products = cart.products;
-      const indexProductInCart = products.findIndex(product => {
-         return product.product.toString() === productId;
-      });
+      const indexProductInCart = products.findIndex(product => 
+         product.product && product.product.toString() === productId.toString()
+      );
 
       if (indexProductInCart !== -1) {
          products.splice(indexProductInCart, 1);
       }
-      await cartManager.update(CartId, products);
+      await cartRepository.updateCart(CartId, products);
       return cart;
    }
 }
 
 const EditCart = async (cartId, newProducts) => {
-   await cartManager.update(cartId, newProducts);
+   await cartRepository.updateCart(cartId, newProducts);
 }
 
 const EditProductQuantity = async (cartId, productId, newQuantity) => {
-   const cart = await cartManager.getById(cartId);
+   const cart = await cartRepository.getCartById(cartId);
    if (cart) {
       const products = cart.products;
-      const indexProductInCart = products.findIndex(product => {
-         return product.product.toString() === productId;
-      });
+      const indexProductInCart = products.findIndex(product => 
+         product.product && product.product.toString() === productId.toString()
+      );
       if (indexProductInCart !== -1) {
          products[indexProductInCart].quantity = newQuantity;
       }
-      cartManager.update(cartId, products );
+      cartRepository.updateCart(cartId, products );
    }
 }
 
 const GetCartById = async (cartId) => {
-   const cart = await cartManager.getById(cartId);
+   const cart = await cartRepository.getCartById(cartId);
    const products = cart.products.map(products => ({
       product: products.product._id, 
       quantity: products.quantity,
@@ -77,7 +84,7 @@ const GetCartById = async (cartId) => {
 }
 
 const DeleteCart = async (cartId) => {
-   await cartManager.delete(cartId);
+   await cartRepository.deleteCart(cartId);
 }
 export {
    CreateCart,

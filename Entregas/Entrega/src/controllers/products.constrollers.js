@@ -59,8 +59,7 @@ const GetById = async (req, res) => {
 const NewProduct = async (req, res) => {
    try {
       const { title, description, code, price, status = true, stock, category, thumbnail } = req.body;
-
-      const result = await NewProductService(title, description, code, price, status = true, stock, category, thumbnail);
+      const result = await NewProductService(title, description, code, price, status, stock, category, thumbnail);
       res.status(201).send({ status: 'success', payload: result });
    } catch (error) {
       res.status(500).send({ status: 'error', message: error.message });

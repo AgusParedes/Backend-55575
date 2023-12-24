@@ -14,6 +14,7 @@ import { initializePassport } from './config/passport.config.js';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import configs from "./config/config.js";
+import currentRouter from "./routes/current.router.js"
 
 const app = express();
 app.use(express.json());
@@ -54,6 +55,7 @@ app.use('/api/carts', cartsRouter);
 // app.use('/', Home); 
 app.use('/', viewsRouter);
 app.use('/api/sessions', sessionsRouter);
+app.use('/current', currentRouter);
 
 
 

@@ -17,7 +17,7 @@ export default class Products {
 }
 
    getById = async (productId) => {
-      const cart = await productsModel.find({ _id: productId });
+      const cart = await productsModel.findOne({ _id: productId });
       return cart;
    }
 
