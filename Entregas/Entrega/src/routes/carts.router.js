@@ -4,8 +4,9 @@ import { CreateCart, AddProductToCart, DeleteProductToCart, EditCart, EditProduc
 import { passportCall } from "../config/passport.config.js";
 import { authorization } from "../utils.js";
 import { processPurchase } from "../controllers/ticket.controllers.js";
+import toAsyncRouter from "async-express-decorator";
 
-const router = Router();
+const router = toAsyncRouter(Router());
 
 router.post ('/', CreateCart )
 router.post('/:cid/product/:pid', passportCall('jwt'),authorization('user'), AddProductToCart);

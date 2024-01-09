@@ -14,9 +14,11 @@ import { initializePassport } from './config/passport.config.js';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import configs from "./config/config.js";
-import currentRouter from "./routes/current.router.js"
+import currentRouter from "./routes/current.router.js";
+import errorHandler from './Errors/index.js';
 
 const app = express();
+
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`))
 app.use(express.urlencoded({extended:true}));
@@ -58,7 +60,7 @@ app.use('/api/sessions', sessionsRouter);
 app.use('/current', currentRouter);
 
 
-
+app.use(errorHandler);
 
 const server = app.listen(configs.port,()=>console.log("Listening on 8080"))
 const io = new Server(server)

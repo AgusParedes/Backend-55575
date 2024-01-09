@@ -4,6 +4,8 @@ import { GetInfoPages as GetInfoPagesService,
          NewProduct as NewProductService,
          EditProduct as EditProductService,
          DeleteProduct as DeleteProductService } from "../services/products.services.js";
+import CustomError from '../Errors/CustomError.js';
+import EErrors from '../Errors/enums.js';
 
 const RenderHome = async (req, res) => {
    try {
@@ -46,24 +48,24 @@ const RenderProductsWithQuerys = async (req, res) => {
 }
 
 const GetById = async (req, res) => {
-   try{
       const { pid } = req.params;
       const product = await GetByIdService(pid)
       res.send({ status: 'success', payload: product });
-   }
-   catch (error) {
-      res.status(500).send({ status: 'error', message: error.message });
-   }
+   
 }
 
 const NewProduct = async (req, res) => {
-   try {
       const { title, description, code, price, status = true, stock, category, thumbnail } = req.body;
+      if (!title || !description || !code || !price || !status || !stock || !category || !thumbnail){
+         throw CustomError.createError({
+            name: 'UserError',
+            cause: 'Invalid data types, first_name, last_name and email required',
+            message: 'Error trying to create user',
+            code: EErrors.INVALID_TYPE_ERROR
+         })
+      }
       const result = await NewProductService(title, description, code, price, status, stock, category, thumbnail);
       res.status(201).send({ status: 'success', payload: result });
-   } catch (error) {
-      res.status(500).send({ status: 'error', message: error.message });
-   }
 }
 
 const EditProduct = async (req, res) => {

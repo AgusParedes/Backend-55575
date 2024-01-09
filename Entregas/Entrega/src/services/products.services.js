@@ -1,6 +1,8 @@
 import Products from '../dao/dbManagers/product.manager.js'
 import ProductRepository from "../repositories/product.reposity.js"
 import { productsModel } from '../dao/dbManagers/models/product.model.js'
+import CustomError from '../Errors/CustomError.js';
+import EErrors from '../Errors/enums.js';
 
 const productDao = new Products();
 const productRepository = new ProductRepository(productDao);
@@ -37,11 +39,18 @@ const RenderProductsWithQuerys = async (limit, page, query, sort, user) => {
 
 const GetById = async (pid) => {
       const product = await productRepository.getProductById(pid);
+      if (!product) {
+         throw CustomError.createError({
+            name: 'UserError',
+            cause: 'Product not found',
+            message: 'Error trying to searching the Product',
+            code: EErrors.PRODUCT_NOT_FOUND
+         })
+      }
       return product;
    }
    
 const NewProduct = async (title, description, code, price, status = true, stock, category, thumbnail) => {
-   if(title || description || code || price || status || stock || category || thumbnail) {
       const product = {
          title, 
          description, 
@@ -54,7 +63,6 @@ const NewProduct = async (title, description, code, price, status = true, stock,
       }
       const result = await productRepository.CreateProduct(product);
       return result;
-   }
    }
 
 const EditProduct = async (pid, updatedFields) => {

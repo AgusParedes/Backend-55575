@@ -1,5 +1,7 @@
 import Carts from "../dao/dbManagers/carts.manager.js";
-import CartRepository from "../repositories/cart.repository.js"
+import CartRepository from "../repositories/cart.repository.js";
+import CustomError from '../Errors/CustomError.js';
+import EErrors from '../Errors/enums.js';
 
 const cartDao = new Carts();
 const cartRepository = new CartRepository(cartDao)
@@ -11,8 +13,14 @@ const CreateCart = async () => {
 
 const AddProductToCart = async (cartId, productId) => {
    const cart = await cartRepository.getCartById(cartId);
-
-   if (cart) {
+   if (!cart) {
+      throw CustomError.createError({
+         name: 'UserError',
+         cause: 'Cart not found',
+         message: 'Error trying to searching the cart',
+         code: EErrors.CART_NOT_FOUND
+      })
+   }
       const products = cart.products;
 
       const productIndexInCart = products.findIndex(product => 
@@ -26,7 +34,7 @@ const AddProductToCart = async (cartId, productId) => {
          products.push({ product: productId, quantity: 1 });
       }
       await cartRepository.updateCart(cartId, products);
-   }
+
    return cart;
 };
 
@@ -34,7 +42,14 @@ const AddProductToCart = async (cartId, productId) => {
 
 const DeleteProductToCart = async (CartId, productId) => {
    const cart = await cartRepository.getCartById(CartId);
-   if (cart) {
+   if (!cart) {
+      throw CustomError.createError({
+         name: 'UserError',
+         cause: 'Cart not found',
+         message: 'Error trying to searching the cart',
+         code: EErrors.CART_NOT_FOUND
+      })
+   }
       const products = cart.products;
       const indexProductInCart = products.findIndex(product => 
          product.product && product.product.toString() === productId.toString()
@@ -45,7 +60,7 @@ const DeleteProductToCart = async (CartId, productId) => {
       }
       await cartRepository.updateCart(CartId, products);
       return cart;
-   }
+   
 }
 
 const EditCart = async (cartId, newProducts) => {
@@ -54,7 +69,14 @@ const EditCart = async (cartId, newProducts) => {
 
 const EditProductQuantity = async (cartId, productId, newQuantity) => {
    const cart = await cartRepository.getCartById(cartId);
-   if (cart) {
+   if (!cart) {
+      throw CustomError.createError({
+         name: 'UserError',
+         cause: 'Cart not found',
+         message: 'Error trying to searching the cart',
+         code: EErrors.CART_NOT_FOUND
+      })
+   }
       const products = cart.products;
       const indexProductInCart = products.findIndex(product => 
          product.product && product.product.toString() === productId.toString()
@@ -63,11 +85,19 @@ const EditProductQuantity = async (cartId, productId, newQuantity) => {
          products[indexProductInCart].quantity = newQuantity;
       }
       cartRepository.updateCart(cartId, products );
-   }
+   
 }
 
 const GetCartById = async (cartId) => {
    const cart = await cartRepository.getCartById(cartId);
+   if (!cart) {
+      throw CustomError.createError({
+         name: 'UserError',
+         cause: 'Cart not found',
+         message: 'Error trying to searching the cart',
+         code: EErrors.CART_NOT_FOUND
+      })
+   }
    const products = cart.products.map(products => ({
       product: products.product._id, 
       quantity: products.quantity,

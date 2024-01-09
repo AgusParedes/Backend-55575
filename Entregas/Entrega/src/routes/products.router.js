@@ -3,8 +3,9 @@ import Router from "express";
 import { RenderHome, GetInfoPages, RenderProductsWithQuerys, GetById, NewProduct, EditProduct, DeleteProduct } from "../controllers/products.constrollers.js";
 import { passportCall } from "../config/passport.config.js";
 import { authorization } from "../utils.js";
+import toAsyncRouter from "async-express-decorator";
 
-const router = Router();
+const router = toAsyncRouter(Router());
 
 router.get('/home', RenderHome);
 router.get('/', GetInfoPages);
