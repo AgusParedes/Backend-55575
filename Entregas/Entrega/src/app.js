@@ -10,12 +10,14 @@ import MongoStore from 'connect-mongo';
 import session from 'express-session';
 import viewsRouter from './routes/views.router.js';
 import sessionsRouter from './routes/sessions.router.js';
+import loggerRouter from './routes/logger.router.js'
 import { initializePassport } from './config/passport.config.js';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import configs from "./config/config.js";
 import currentRouter from "./routes/current.router.js";
 import errorHandler from './Errors/index.js';
+import { addLogger } from './utils.js';
 
 const app = express();
 
@@ -50,6 +52,7 @@ app.use(session({
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(addLogger);
 
 // app.use('/realtimeproducts', realTimeProducts(io));
 app.use('/api/products', productsRouter);
@@ -58,9 +61,10 @@ app.use('/api/carts', cartsRouter);
 app.use('/', viewsRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/current', currentRouter);
-
+app.use('/loggerTest', loggerRouter)
 
 app.use(errorHandler);
+
 
 const server = app.listen(configs.port,()=>console.log("Listening on 8080"))
 const io = new Server(server)

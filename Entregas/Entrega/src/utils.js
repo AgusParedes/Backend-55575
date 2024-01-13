@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import configs from "./config/config.js";
+import winston from 'winston';
 
 
 const __filename = fileURLToPath(import.meta.url)
@@ -33,11 +34,55 @@ const authorization = (role) => {
    }
 }
 
+const ENVIRONMENT = 'production';
+let logger;
+
+const customLevelOptions = {
+   levels: {
+      debug: 5, 
+      http: 4, 
+      info: 3, 
+      warning: 2, 
+      error: 1, 
+      fatal: 0
+   }}
+
+if(ENVIRONMENT === 'production') {
+      logger = winston.createLogger({
+         levels: customLevelOptions.levels,
+         transports: [
+            new winston.transports.Console({
+               level: 'info'
+            }),
+            new winston.transports.File({
+               filename: 'logs/errors.log',
+               level: 'error'
+            })
+         ]
+   });
+} else {
+      logger = winston.createLogger({
+         levels: customLevelOptions.levels,
+         transports: [
+            new winston.transports.Console({
+               level: 'debug'
+            })
+         ]
+   });
+}
+
+
+const addLogger = (req, res, next) => {
+   req.logger = logger;
+   next();
+}
+
 
    export{
       __dirname,
       createHash,
       isValidPassword,
       generateToken,
-      authorization
+      authorization,
+      addLogger
    } 

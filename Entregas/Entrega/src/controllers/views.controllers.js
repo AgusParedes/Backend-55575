@@ -21,6 +21,7 @@ const RenderHome = async (req, res) => {
       res.render('products', { products, cartId, total: result.total, limit, page, user: req.user });
    } catch (error) {
       res.status(500).send({ status: 'error', message: error.message });
+      req.logger.error(error.message);
    }
 }
 

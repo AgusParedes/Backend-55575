@@ -12,6 +12,7 @@ const RenderHome = async (req, res) => {
       res.render('home');
    } catch (error) {
       res.status(500).send({ error: error.message });
+      req.logger.error(error.message);
    }
 }
 
@@ -27,6 +28,7 @@ const GetInfoPages = async (req, res) => {
       res.send({ status: 'success', payload: response });
    } catch (error) {
       res.status(500).send({ error: error.message });
+      req.logger.error(error.message);
    }
 }
 
@@ -44,6 +46,7 @@ const RenderProductsWithQuerys = async (req, res) => {
       res.render('products', { products, cartId, total: result.total, limit, page });
    } catch (error) {
       res.status(500).send({ status: 'error', message: error.message });
+      req.logger.error(error.message);
    }
 }
 
@@ -76,6 +79,7 @@ const EditProduct = async (req, res) => {
       res.send({ status: 'success', payload: updatedProduct });
    } catch (error) {
       res.status(500).send({ status: 'error', message: error.message });
+      req.logger.error(error.message);
    }
 }
 
@@ -86,6 +90,7 @@ const DeleteProduct = async (req, res) => {
       res.send({ status: 'success', payload: result });
    } catch (error) {
       res.status(404).send({ status: 'error', error: 'Producto no encontrado' });
+      req.logger.error(error.message);
    }
 }
 

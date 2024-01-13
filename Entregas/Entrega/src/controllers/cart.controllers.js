@@ -12,6 +12,7 @@ const CreateCart = async (req, res) => {
       res.send({ payload: result });
    } catch (error) {
       res.status(500).send({ error: error.message });
+      req.logger.error(error.message);
    }
 };
 
@@ -43,6 +44,7 @@ const EditCart = async (req, res) => {
       res.status(200).send('Carrito actualizado');
    } catch (error) {
       res.status(500).send({ error: error.message });
+      req.logger.error(error.message);
    }
 };
 
@@ -73,6 +75,7 @@ const DeleteCart = async (req, res) => {
       res.status(200).send('Carrito eliminado');
    } catch (error) {
       res.status(500).send({ error: error.message });
+      req.logger.error(error.message);
    }
 };
 
