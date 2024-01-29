@@ -8,5 +8,6 @@ export default class ProductDto {
         this.status = product.status;
         this.category = product.category;
         this.thumbnail = product.thumbnail || [];
+        this.owner = product.owner; 
     }
 }

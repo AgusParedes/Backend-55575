@@ -5,6 +5,9 @@ import { CreateCart as CreateCartService,
          EditProductQuantity as EditProductQuantityService,
          GetCartById as GetCartByIdService,
          DeleteCart as DeleteCartService } from "../services/carts.services.js";
+import { GetById as GetByIdService } from "../services/products.services.js";
+import CustomError from '../Errors/CustomError.js';
+import EErrors from '../Errors/enums.js';
 
 const CreateCart = async (req, res) => {
    try {
@@ -17,13 +20,29 @@ const CreateCart = async (req, res) => {
 };
 
 const AddProductToCart = async (req, res) => {
+   try {
       const cartId = req.params.cid;
-      const productId = req.params.pid; 
+      const productId = req.params.pid;
+      const userRole = req.user.role;
+      const product = await GetByIdService(productId); 
 
-      const cart = await AddProductToCartService (cartId, productId);
+      if (userRole === 'premium' && product.owner === req.user.email) {
+         throw CustomError.createError({
+            name: 'UserError',
+            cause: 'Permission denied',
+            message: 'You are not allowed to add your own product to your cart',
+            code: EErrors.PERMISSION_DENIED
+         });
+      }
 
+      const cart = await AddProductToCartService(cartId, productId);
       res.send({ payload: cart });
+   } catch (error) {
+      res.status(500).send({ error: error.message });
+      req.logger.error(error.message);
+   }
 };
+
 
 const DeleteProductToCart = async (req, res) => {
       const cartId = req.params.cid;

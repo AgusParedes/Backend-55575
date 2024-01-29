@@ -50,7 +50,7 @@ const GetById = async (pid) => {
       return product;
    }
    
-const NewProduct = async (title, description, code, price, status = true, stock, category, thumbnail) => {
+const NewProduct = async (title, description, code, price, status = true, stock, category, thumbnail, owner) => {
       const product = {
          title, 
          description, 
@@ -59,7 +59,8 @@ const NewProduct = async (title, description, code, price, status = true, stock,
          status, 
          stock, 
          category, 
-         thumbnail
+         thumbnail,
+         owner
       }
       const result = await productRepository.CreateProduct(product);
       return result;

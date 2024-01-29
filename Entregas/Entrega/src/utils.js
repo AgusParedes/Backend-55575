@@ -24,12 +24,21 @@ const generateToken = (user) => {
       console.error('Error en generateToken:', error);
       throw error;
    }
+   };
+
+const generateTokenResetPassword = (email) => {
+   try {
+      const token = jwt.sign({ email }, configs.privateKeyJwt , { expiresIn: '1h' });
+      return token;
+   } catch (error) {
+      console.error('Error en generateToken:', error);
+      throw error;
+   }
    }
 
-
-const authorization = (role) => {
+const authorization = (...roles) => {
    return async (req, res, next) => {
-      if(req.user.role !== role) return res.status(403).send({ status: 'error', message: 'not permissions' })
+      if(!roles.includes(req.user.role)) return res.status(403).send({ status: 'error', message: 'not permissions' })
       next();
    }
 }
@@ -83,6 +92,7 @@ const addLogger = (req, res, next) => {
       createHash,
       isValidPassword,
       generateToken,
+      generateTokenResetPassword,
       authorization,
       addLogger
    } 

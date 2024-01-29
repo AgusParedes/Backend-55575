@@ -7,6 +7,6 @@ const router = Router();
 
 router.get ('/register', Register) 
 router.get ('/login', Login) 
-router.get('/', passportCall('jwt'),authorization('user'), RenderHome);
+router.get('/', passportCall('jwt'),authorization('user','premium', 'admin'), RenderHome);
 
 export default router

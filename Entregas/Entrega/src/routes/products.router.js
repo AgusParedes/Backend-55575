@@ -11,8 +11,8 @@ router.get('/home', RenderHome);
 router.get('/', GetInfoPages);
 router.get('/products', RenderProductsWithQuerys);
 router.get('/:pid', GetById);
-router.post('/', passportCall('jwt'),authorization('admin'), NewProduct);
+router.post('/', passportCall('jwt'),authorization('premium', 'admin'), NewProduct);
 router.put('/:pid', passportCall('jwt'),authorization('admin'), EditProduct);
-router.delete('/', passportCall('jwt'),authorization('admin'), DeleteProduct);
+router.delete('/:pid', passportCall('jwt'),authorization('premium', 'admin'), DeleteProduct);
 
 export default router;

@@ -5,7 +5,7 @@ import CustomError from '../Errors/CustomError.js';
 import EErrors from '../Errors/enums.js';
 
 const Register = async (req, res) => {
-      const { first_name, last_name, age, role, email, password } = req.body;
+      const { first_name, last_name, age, role = "user", email, password } = req.body;
 
       if (!first_name || !last_name || !age || !role || !email || !password){
          throw CustomError.createError({
@@ -15,6 +15,7 @@ const Register = async (req, res) => {
             code: EErrors.INVALID_TYPE_ERROR
          })
       }
+      
       const userToSave = await RegisterService(first_name, last_name, age, role, email, password)
 
       res.status(201).send({ status: 'success', payload: userToSave });
@@ -22,6 +23,14 @@ const Register = async (req, res) => {
 
 const Login =  async (req, res) => {
       const { email, password } = req.body;
+      if(!email || !password){
+         throw CustomError.createError({
+            name: 'UserError',
+            cause: 'Invalid data types,email and password required',
+            message: 'Error trying to loge in',
+            code: EErrors.INVALID_TYPE_ERROR
+         })
+      }
       const accessToken = await LoginService(email, password)
       res.cookie('coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true }).send({ status: 'success', message: 'login success' })
 }

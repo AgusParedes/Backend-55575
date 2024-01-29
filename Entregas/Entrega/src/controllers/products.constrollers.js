@@ -58,16 +58,20 @@ const GetById = async (req, res) => {
 }
 
 const NewProduct = async (req, res) => {
-      const { title, description, code, price, status = true, stock, category, thumbnail } = req.body;
-      if (!title || !description || !code || !price || !status || !stock || !category || !thumbnail){
+      const { title, description, code, price, status = true, stock, category, thumbnail} = req.body;
+      let owner = req.user.email;
+      if (!(req.user.role === 'premium')) {
+         owner = "admin";
+      }
+      if (!title || !description || !code || !price || !status || !stock || !category){
          throw CustomError.createError({
-            name: 'UserError',
-            cause: 'Invalid data types, first_name, last_name and email required',
-            message: 'Error trying to create user',
+            name: 'ProductError',
+            cause: 'Invalid data types',
+            message: 'Error trying to create product',
             code: EErrors.INVALID_TYPE_ERROR
          })
       }
-      const result = await NewProductService(title, description, code, price, status, stock, category, thumbnail);
+      const result = await NewProductService(title, description, code, price, status, stock, category, thumbnail, owner);
       res.status(201).send({ status: 'success', payload: result });
 }
 
@@ -84,15 +88,36 @@ const EditProduct = async (req, res) => {
 }
 
 const DeleteProduct = async (req, res) => {
-   try {
+
       const { pid } = req.params;
-      const result = await DeleteProductService(pid)
-      res.send({ status: 'success', payload: result });
-   } catch (error) {
-      res.status(404).send({ status: 'error', error: 'Producto no encontrado' });
-      req.logger.error(error.message);
-   }
+      const userRole = req.user.role;
+      console.log(userRole)
+      if (userRole === 'admin') {
+         const result = await DeleteProductService(pid)
+         res.send({ status: 'success', payload: result });
+      } else if (userRole === 'premium') {
+         const product = await GetByIdService(pid);
+         if (product.owner === req.user.email) { 
+            const result = await DeleteProductService(pid)
+            res.send({ status: 'success', payload: result });
+         } else {
+            throw CustomError.createError({
+               name: 'UserError',
+               cause: 'Permission denied',
+               message: 'You are not allowed to delete this product',
+               code: EErrors.PERMISSION_DENIED
+            })
+         }
+      } else {
+         throw CustomError.createError({
+            name: 'UserError',
+            cause: 'Invalid user role',
+            message: 'You do not have the necessary permissions to perform this action',
+            code: EErrors.PERMISSION_DENIED
+         })
+      }
 }
+
 
 
 export {

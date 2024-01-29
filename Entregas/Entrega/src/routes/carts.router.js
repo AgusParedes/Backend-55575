@@ -9,7 +9,7 @@ import toAsyncRouter from "async-express-decorator";
 const router = toAsyncRouter(Router());
 
 router.post ('/', CreateCart )
-router.post('/:cid/product/:pid', passportCall('jwt'),authorization('user'), AddProductToCart);
+router.post('/:cid/product/:pid', passportCall('jwt'),authorization('user','premium', 'admin'), AddProductToCart);
 router.delete('/:cid/products/:pid', DeleteProductToCart);
 router.put('/:cid', EditCart);
 router.put('/:cid/products/:pid', EditProductQuantity);

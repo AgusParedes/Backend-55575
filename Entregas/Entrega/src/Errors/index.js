@@ -44,6 +44,13 @@ export default (error, req, res, next) => {
             description: error.cause
          });
          break;
+         case EErrors.PERMISSION_DENIED:
+         res.status(403).send({
+            status: 'error',
+            error: error.name,
+            description: error.cause
+         });
+         break;
       default:
          res.status(500).send({
             status: 'error',

@@ -10,7 +10,7 @@ import MongoStore from 'connect-mongo';
 import session from 'express-session';
 import viewsRouter from './routes/views.router.js';
 import sessionsRouter from './routes/sessions.router.js';
-import loggerRouter from './routes/logger.router.js'
+import loggerRouter from './routes/logger.router.js';
 import { initializePassport } from './config/passport.config.js';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
@@ -18,6 +18,10 @@ import configs from "./config/config.js";
 import currentRouter from "./routes/current.router.js";
 import errorHandler from './Errors/index.js';
 import { addLogger } from './utils.js';
+import { cpus } from 'os'
+import viewsresetPassword from './routes/viewsresetPassword.router.js'
+import resetPasswordRouter from './routes/resetPassword.router.js'
+import userRouter from './routes/user.router.js'
 
 const app = express();
 
@@ -37,6 +41,9 @@ try {
 } catch (error) {
    console.log(error.message);
 }
+
+const numeroNucleos = cpus().length;
+console.log(numeroNucleos);
 
 app.use(session({
    store: MongoStore.create({
@@ -62,7 +69,9 @@ app.use('/', viewsRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/current', currentRouter);
 app.use('/loggerTest', loggerRouter)
-
+app.use('/api/reset-password', viewsresetPassword)
+app.use('/api/logic-reset', resetPasswordRouter)
+app.use('/api/users', userRouter)
 app.use(errorHandler);
 
 
