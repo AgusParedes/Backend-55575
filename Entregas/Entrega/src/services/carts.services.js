@@ -22,7 +22,14 @@ const AddProductToCart = async (cartId, productId) => {
       })
    }
       const products = cart.products;
-
+      if (!products) {
+         throw CustomError.createError({
+            name: 'UserError',
+            cause: 'Product not found',
+            message: 'Error trying to searching the product',
+            code: EErrors.PRODUCT_NOT_FOUND
+         })
+      }
       const productIndexInCart = products.findIndex(product => 
          product.product && product.product.toString() === productId.toString()
       );
@@ -51,6 +58,14 @@ const DeleteProductToCart = async (CartId, productId) => {
       })
    }
       const products = cart.products;
+      if (!products) {
+         throw CustomError.createError({
+            name: 'UserError',
+            cause: 'Product not found',
+            message: 'Error trying to searching the product',
+            code: EErrors.PRODUCT_NOT_FOUND
+         })
+      }
       const indexProductInCart = products.findIndex(product => 
          product.product && product.product.toString() === productId.toString()
       );
@@ -78,6 +93,14 @@ const EditProductQuantity = async (cartId, productId, newQuantity) => {
       })
    }
       const products = cart.products;
+      if (!products) {
+         throw CustomError.createError({
+            name: 'UserError',
+            cause: 'Product not found',
+            message: 'Error trying to searching the product',
+            code: EErrors.PRODUCT_NOT_FOUND
+         })
+      }
       const indexProductInCart = products.findIndex(product => 
          product.product && product.product.toString() === productId.toString()
       );

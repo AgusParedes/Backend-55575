@@ -13,7 +13,7 @@ router.post('/:cid/product/:pid', passportCall('jwt'),authorization('user','prem
 router.delete('/:cid/products/:pid', DeleteProductToCart);
 router.put('/:cid', EditCart);
 router.put('/:cid/products/:pid', EditProductQuantity);
-router.get('/cart/:cid', GetCartById);
+router.get('/:cid', GetCartById);
 router.delete('/:cid', DeleteCart);
 router.post('/:cid/purchase', passportCall('jwt'),authorization('user'), processPurchase);
 

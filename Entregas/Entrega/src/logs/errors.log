@@ -2,3 +2,4 @@
 {"level":"error","message":"prueba error"}
 {"level":"fatal","message":"prueba fatal"}
 {"level":"error","message":"You are not allowed to add your own product to your cart"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'cart')"}

@@ -1,8 +1,8 @@
 <div>
    <div>
       <h1>Lista de Productos</h1>
-      <div id="container">
-         {{#each productos}}
+{{#each products}}
+   <div class="product">
          <ul>
             <li>title: {{this.title}}</li> 
             <li>description: {{this.description}}</li>
@@ -12,10 +12,9 @@
             <li>stock: {{this.stock}}</li>
             <li>category: {{this.category}}</li>
             <li>thumbnail: ["{{this.thumbnail}}"]</li>
-            <li>owner: ["{{this.owner}}"]</li>
-            <li>id: {{this.id}}</li>
+            <li>owner: {{this.owner}}</li>
+            <li>id: {{this._id}}</li>
          </ul>
-         {{/each}}
       </div>
-   </div>
+{{/each}}
 </div>

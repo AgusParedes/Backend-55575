@@ -1,6 +1,6 @@
 import express from 'express';
 import handlebars from 'express-handlebars';
-import { __dirname } from './utils.js';
+import { __dirname, __mainDirname } from './utils.js';
 import { Server } from 'socket.io';
 import productsRouter from './routes/products.router.js'
 import cartsRouter from './routes/carts.router.js';
@@ -22,6 +22,9 @@ import { cpus } from 'os'
 import viewsresetPassword from './routes/viewsresetPassword.router.js'
 import resetPasswordRouter from './routes/resetPassword.router.js'
 import userRouter from './routes/user.router.js'
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express';
+
 
 const app = express();
 
@@ -57,6 +60,21 @@ app.use(session({
 
 
 initializePassport();
+
+const swaggerOptions = {
+   definition: {
+      openapi: '3.0.1',
+      info: {
+         title: 'Documentación del proyecto de venta de productos',
+         description: 'API pensada en resolver el proceso de compra de productos.'
+      }
+   },
+   apis: [`${__mainDirname}/Docs/**/*.yaml`]
+}
+const specs = swaggerJsdoc(swaggerOptions);
+
+app.use('/api/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(addLogger);

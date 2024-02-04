@@ -8,8 +8,9 @@ import winston from 'winston';
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-
-
+const __mainDirname = path.join(__dirname, '..');
+console.log("este es el dirname",__dirname)
+console.log("este es el maindarme",__mainDirname)
 const createHash = password =>
    bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
@@ -94,5 +95,6 @@ const addLogger = (req, res, next) => {
       generateToken,
       generateTokenResetPassword,
       authorization,
-      addLogger
+      addLogger,
+      __mainDirname
    } 

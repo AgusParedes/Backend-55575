@@ -3,13 +3,15 @@ import { GetInfoPages as GetInfoPagesService,
          GetById as GetByIdService,
          NewProduct as NewProductService,
          EditProduct as EditProductService,
-         DeleteProduct as DeleteProductService } from "../services/products.services.js";
+         DeleteProduct as DeleteProductService,
+         getAllProducts as getAllProductsService } from "../services/products.services.js";
 import CustomError from '../Errors/CustomError.js';
 import EErrors from '../Errors/enums.js';
 
 const RenderHome = async (req, res) => {
    try {
-      res.render('home');
+      const products = await getAllProductsService();
+      res.render('home', { products });
    } catch (error) {
       res.status(500).send({ error: error.message });
       req.logger.error(error.message);

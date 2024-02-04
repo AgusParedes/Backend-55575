@@ -76,11 +76,16 @@ const DeleteProduct = async (pid) => {
       return result;
    }
 
+const getAllProducts = async () => {
+      const products = productRepository.getAllProducts()
+      return  products 
+   }
 export {
    GetInfoPages,
    RenderProductsWithQuerys,
    GetById,
    NewProduct,
    EditProduct,
-   DeleteProduct
+   DeleteProduct,
+   getAllProducts
 }

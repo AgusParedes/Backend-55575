@@ -9,7 +9,7 @@ const router = toAsyncRouter(Router());
 
 router.get('/home', RenderHome);
 router.get('/', GetInfoPages);
-router.get('/products', RenderProductsWithQuerys);
+router.get('/productsWithQuerys', RenderProductsWithQuerys);
 router.get('/:pid', GetById);
 router.post('/', passportCall('jwt'),authorization('premium', 'admin'), NewProduct);
 router.put('/:pid', passportCall('jwt'),authorization('admin'), EditProduct);
