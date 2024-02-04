@@ -1,0 +1,240 @@
+paths:
+  /carts:
+    post:
+      summary: Crear un nuevo carrito
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Carrito creado con éxito
+        "500":
+          description: Error interno del servidor
+
+    put:
+      summary: Editar el carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/updateCart'
+      responses:
+        "200":
+          description: Carrito editado con éxito
+        "500":
+          description: Error interno del servidor
+        "404":
+          description: Carrito no encontrado
+
+    get:
+      summary: Obtener carrito por Id
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto agregado al carrito con éxito
+        "500":
+          description: Error interno del servidor
+        "404":
+          description: Carrito no encontrado
+
+    delete:
+      summary: Eliminar un carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Carrito eliminado con éxito
+        "500":
+          description: Error interno del servidor
+        "404":
+          description: Carrito no encontrado
+
+  /carts/{cid}/product/{pid}:
+    post:
+      summary: Agregar un producto al carrito
+      tags:
+        - Carts
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: ID del producto a agregar
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto agregado al carrito con éxito
+        "500":
+          description: Error interno del servidor
+        "404":
+          description: Carrito o Producto no encontrado 
+
+    put:
+      summary: Edita el quantity del producto en el carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: ID del producto a eliminar
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: string
+                  description: Nueva cantidad del producto en el carrito
+              example:
+                quantity: 5
+      responses:
+        "200":
+          description: Producto eliminado del carrito con éxito
+        "500":
+          description: Error interno del servidor
+        "404":
+          description: Carrito o Producto no encontrado 
+
+    delete:
+      summary: Eliminar un producto del carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: ID del producto a eliminar
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto eliminado del carrito con éxito
+        "500":
+          description: Error interno del servidor
+        "404":
+          description: Carrito o Producto no encontrado 
+
+  /carts/{cid}/purchase:
+    post:
+      summary: Procesar la compra del carrito
+      tags:
+        - Carts
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Compra procesada con éxito
+        "500":
+          description: Error interno del servidor
+        "404":
+          description: Carrito no encontrado 
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID único del carrito generado automáticamente por MongoDB
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+                description: ID del producto
+              quantity:
+                type: integer
+                description: Cantidad del producto en el carrito
+      example:
+        _id: 65b691f514744f14d981c850
+        products:
+          - product: 65b691f514744f14d981c850
+            quantity: 2
+          - product: 65b691f514744f14d981c851
+            quantity: 1
+  requestBodies:
+    updateCart:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+                description: ID del producto
+              quantity:
+                type: integer
+                description: Cantidad del producto en el carrito
+      example:
+        products:
+          - product: 65b691f514744f14d981c850
+            quantity: 2
+          - product: 65b691f514744f14d981c851
+            quantity: 1
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

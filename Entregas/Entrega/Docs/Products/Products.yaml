@@ -1,0 +1,226 @@
+paths:
+  /api/products/home:
+    get:
+      summary: Renderizar el listado de productos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: El renderizado fue exitoso
+        "500":
+          description: Error interno del servidor
+
+  /api/products:
+    get:
+      summary: Obtener información de páginas de productos
+      tags:
+        - Products
+      parameters:
+        - name: limit
+          in: query
+          description: Número máximo de productos por página
+          required: false
+          schema:
+            type: integer
+        - name: page
+          in: query
+          description: Número de página
+          required: false
+          schema:
+            type: integer
+        - name: query
+          in: query
+          description: Consulta para filtrar productos (en formato JSON)
+          required: false
+          schema:
+            type: string
+        - name: sort
+          in: query
+          description: Orden de clasificación de productos (en formato JSON)
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: La información de la página de productos se obtiene con éxito
+        "500":
+          description: Error interno del servidor
+    post:
+      summary: Crear un nuevo producto
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/updateUser'
+      responses:
+        "201":
+          description: Producto creado con éxito
+        "500":
+          description: Error interno del servidor
+
+  /api/products/productsWithQuerys:
+    get:
+      summary: Renderizar el listado de productos pero con las indicaciones de los querys
+      tags:
+        - Products
+      responses:
+        "200":
+          description: El renderizado fue exitoso
+        "500":
+          description: Error interno del servidor
+
+  /api/products/{pid}:
+    get:
+      summary: Obtener información de un producto por su ID
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          description: ID del producto a obtener
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: La información del producto se obtiene con éxito
+        "500":
+          description: Error interno del servidor
+        "404":
+          description: Producto no encontrado
+
+    put:
+      summary: Actualizar información de un producto por su ID
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: pid
+          in: path
+          description: ID del producto a actualizar
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Products'
+      responses:
+        "200":
+          description: El producto se actualiza con éxito
+        "500":
+          description: Error interno del servidor
+        "400":
+          description: Tipo de dato inválido en la solicitud.
+        "404":
+          description: Producto no encontrado
+
+    delete:
+      summary: Eliminar un producto por su ID
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: pid
+          in: path
+          description: ID del producto a eliminar
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: El producto se elimina con éxito
+        "500":
+          description: Error interno del servidor
+        "404":
+          description: Producto no encontrado
+components:
+  schemas:
+    Products:
+      type: Object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenrado por mongodb, es el id del producto
+        title:
+          type: String
+          description: Titulo del producto
+        description:
+          type: String
+          description: Descripcion del producto
+        code:
+          type: String
+          description: Codigo unico del producto
+        price:
+          type: Number
+          description: Precio del producto
+        stock:
+          type: Number
+          description: Stock del producto
+        status:
+          type: Boolean
+          description: Estado del producto
+        category:
+          type: String
+          description: Categoria del producto
+        thumbnail:
+          type: [String]
+          description: Array con rutas de las imagenes del producto
+        owner:
+          type: String
+          description: Creador del producto  
+      example:
+        _id: ObjectId("65b691f514744f14d981c850")
+        title: Zapatillas
+        description: Zapatillas adidas
+        code: 12a3
+        price: 1200
+        stock: 10
+        status: true
+        category: Indumentaria
+        thumbnail: [imagen1.png,imagen2.png]
+        owner: 777@gmail.com
+  requestBodies:
+    updateUser:
+      type: Object
+      properties:
+        title:
+          type: String
+          description: Titulo del producto
+        description:
+          type: String
+          description: Descripcion del producto
+        code:
+          type: String
+          description: Codigo unico del producto
+        price:
+          type: Number
+          description: Precio del producto
+        stock:
+          type: Number
+          description: Stock del producto
+        category:
+          type: String
+          description: Categoria del producto
+      example:
+        title: Zapatillas
+        description: Zapatillas adidas
+        code: 12a3
+        price: 1200
+        stock: 10
+        category: Indumentaria
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
