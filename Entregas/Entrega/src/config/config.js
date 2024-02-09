@@ -2,11 +2,13 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+console.log('Valor de PRIVATE_KEY_JWT:', process.env.PRIVATE_KEY_JWT); // Agrega esta línea para imprimir el valor
+
 const configs = {
    port: process.env.PORT,
    mongoUrl: process.env.MONGO_URL,
-   privateKeyJwt:process.env.PRIVATE_KEY_JWT,
-   sessionSecret:process.env.SESSION_SECRET,
+   privateKeyJwt: process.env.PRIVATE_KEY_JWT,
+   sessionSecret: process.env.SESSION_SECRET,
    userNodemailer: process.env.USER_NODEMAILER,
    passwordNodemailer: process.env.PASSWORD_NODEMAILER
 };

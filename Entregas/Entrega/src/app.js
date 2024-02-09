@@ -41,23 +41,21 @@ app.set('view engine', 'handlebars')
 try {
    await mongoose.connect(configs.mongoUrl);
    console.log('DB connected');
+   app.use(session({
+      store: MongoStore.create({
+         client: mongoose.connection.getClient(),
+         ttl: 3600
+      }),
+      secret: configs.sessionSecret,
+      resave: true,
+      saveUninitialized: true, 
+   }));
 } catch (error) {
    console.log(error.message);
 }
 
 const numeroNucleos = cpus().length;
 console.log(numeroNucleos);
-
-app.use(session({
-   store: MongoStore.create({
-      client: mongoose.connection.getClient(),
-      ttl: 3600
-   }),
-   secret: configs.sessionSecret,
-   resave: true,
-   saveUninitialized: true, 
-}));
-
 
 initializePassport();
 

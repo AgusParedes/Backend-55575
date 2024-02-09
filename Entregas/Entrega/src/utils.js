@@ -5,12 +5,10 @@ import jwt from 'jsonwebtoken';
 import configs from "./config/config.js";
 import winston from 'winston';
 
-
+console.log("este es la key privada", configs.privateKeyJwt)
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const __mainDirname = path.join(__dirname, '..');
-console.log("este es el dirname",__dirname)
-console.log("este es el maindarme",__mainDirname)
 const createHash = password =>
    bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
@@ -23,9 +21,11 @@ const generateToken = (user) => {
       return token;
    } catch (error) {
       console.error('Error en generateToken:', error);
+      console.log("este es la key privada", configs.privateKeyJwt)
       throw error;
    }
    };
+
 
 const generateTokenResetPassword = (email) => {
    try {
@@ -96,5 +96,5 @@ const addLogger = (req, res, next) => {
       generateTokenResetPassword,
       authorization,
       addLogger,
-      __mainDirname
+      __mainDirname,
    } 

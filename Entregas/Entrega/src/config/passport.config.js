@@ -95,6 +95,7 @@ const initializePassport = () => {
       secretOrKey: configs.privateKeyJwt
    }, async(jwt_payload, done) => {
          try {
+            console.log('JWT Payload:', jwt_payload);
             return done(null, jwt_payload.user);
          } catch (error) {
             return done(error);
@@ -115,6 +116,7 @@ const passportCall = (strategy) => {
       passport.authenticate(strategy, { session: false }, function(err, user, info) {
             if(err) return next(err);
             if(!user) {
+               console.log('Authentication failed:', info.messages ? info.messages : info.toString());
                return res.status(401).send({ status: 'error', error: info.messages ? info.messages : info.toString() })
             }
             req.user = user;
