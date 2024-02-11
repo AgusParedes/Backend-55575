@@ -32,7 +32,7 @@ const Login =  async (req, res) => {
          })
       }
       const accessToken = await LoginService(email, password)
-      res.cookie('coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true }).send({ status: 'success', message: 'login success' })
+      res.cookie('coderCookie', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true }).send({ status: 'success', message: 'login success' })
 }
 
 const Logout = (req, res) => {
