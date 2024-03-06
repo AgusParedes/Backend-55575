@@ -12,8 +12,8 @@ import bcrypt from 'bcrypt';
 const userDao = new Users();
 const userRepository = new UserRepository(userDao)
 
-const Register = async (first_name, last_name, age, role, email, password) => {
-      const user = await userRepository.getUserByEmail(email);
+const Register = async (first_name, last_name, age, role, email, password,) => {
+      const user = await userRepository.GetUserByEmail(email);
       console.log(user);
       if (!user) {
          const cart = await cartsModel.create({ products: [] });
@@ -39,7 +39,7 @@ const Register = async (first_name, last_name, age, role, email, password) => {
    }
 
 const Login = async (email, password) => {
-      const user = await userRepository.getUserByEmail(email);
+      const user = await userRepository.GetUserByEmail(email);
       if(!user){
          throw CustomError.createError({
             name: 'UserError',

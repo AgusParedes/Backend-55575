@@ -5,7 +5,6 @@ import jwt from 'jsonwebtoken';
 import configs from "./config/config.js";
 import winston from 'winston';
 
-console.log("este es la key privada", configs.privateKeyJwt)
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const __mainDirname = path.join(__dirname, '..');
@@ -21,13 +20,12 @@ const generateToken = (user) => {
       return token;
    } catch (error) {
       console.error('Error en generateToken:', error);
-      console.log("este es la key privada", configs.privateKeyJwt)
       throw error;
    }
    };
 
 
-const generateTokenResetPassword = (email) => {
+const generateTokenOneHour = (email) => {
    try {
       const token = jwt.sign({ email }, configs.privateKeyJwt , { expiresIn: '1h' });
       return token;
@@ -93,7 +91,7 @@ const addLogger = (req, res, next) => {
       createHash,
       isValidPassword,
       generateToken,
-      generateTokenResetPassword,
+      generateTokenOneHour,
       authorization,
       addLogger,
       __mainDirname,

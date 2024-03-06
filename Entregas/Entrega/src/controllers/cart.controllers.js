@@ -78,10 +78,17 @@ const EditProductQuantity = async (req, res) => {
 };
 
 const GetCartById = async (req, res) => {
+   try {
       const cartId = req.params.cid;
       const products = await GetCartByIdService(cartId);
+      console.log(cartId)
       console.log(products)
       res.render('cart', { cartId, products });
+   } catch (error) {
+      res.status(500).send({ error: error.message });
+      req.logger.error(error.message);
+   }
+      
 };
 
 

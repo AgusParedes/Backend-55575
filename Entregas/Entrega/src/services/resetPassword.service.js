@@ -1,4 +1,4 @@
-import { generateTokenResetPassword } from "../utils.js";
+import { generateTokenOneHour } from "../utils.js";
 import { sendEmail } from "./mail.service.js";
 import Users from '../dao/dbManagers/users.manager.js';
 import UserRepository from "../repositories/user.reposity.js"
@@ -8,9 +8,9 @@ const userRepository = new UserRepository(userDao)
 
 const sendPasswordResetEmail = async (email) => {
    try {
-      const user = await userRepository.getUserByEmail(email);
+      const user = await userRepository.GetUserByEmail(email);
       if(user){
-         const token = generateTokenResetPassword(email);
+         const token = generateTokenOneHour(email);
          const resetPasswordLink = `http://localhost:8080/api/reset-password/NewPassword?token=${token}`;   
          const emailInvalidCredentials = {
             to: user.email,

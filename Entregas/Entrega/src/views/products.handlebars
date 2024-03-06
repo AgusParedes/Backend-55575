@@ -4,25 +4,28 @@
    <p>Edad: {{user.age}}</p>
    <p>Rol: {{user.role}}</p>
    <a href="/api/sessions/logout"><button>Cerrar Sesion</button></a>
+   <a href="/api/carts/{{user.cart}}"><button>Ir al carrito</button></a>
 </div>
-{{#each products}}
-   <div class="product">
-         <ul>
-            <li>title: {{this.title}}</li> 
-            <li>description: {{this.description}}</li>
-            <li>code: {{this.code}}</li>
-            <li>price: ${{this.price}}</li>
-            <li>status: {{this.status}}</li>
-            <li>stock: {{this.stock}}</li>
-            <li>category: {{this.category}}</li>
-            <li>thumbnail: ["{{this.thumbnail}}"]</li>
-            <li>owner: {{this.owner}}</li>
-            <li>id: {{this._id}}</li>
-            <li>
-               <form action="http://localhost:8080/api/carts/{{../cartId}}/product/{{this._id}}" method="post">
+<div style="display: flex; gap: 35px; flex-wrap: wrap; justify-content: center; margin-top: 50px;">
+   {{#each products}}
+   <div class="product" style="width: 386px; border: 1px solid #ccc; padding: 10px;">
+            <p>title: {{this.title}}</p> 
+            <p>description: {{this.description}}</p>
+            <p>code: {{this.code}}</p>
+            <p>price: ${{this.price}}</p>
+            <p>status: {{this.status}}</p>
+            <p>stock: {{this.stock}}</p>
+            <p>category: {{this.category}}</p>
+            <p>thumbnail: ["{{this.thumbnail}}"]</p>
+            <p>owner: {{this.owner}}</p>
+            <p>id: {{this._id}}</p>
+            <p>
+               <form id="addToCartForm-{{this._id}}" action="http://localhost:8080/api/carts/{{../cartId}}/product/{{this._id}}" method="post">
                   <button type="submit">Agregar al carrito</button>
                </form>
-            </li>
-         </ul>
+            </p>
    </div>
 {{/each}}
+</div>
+
+<script src="/js/addProductToCart.js"></script>

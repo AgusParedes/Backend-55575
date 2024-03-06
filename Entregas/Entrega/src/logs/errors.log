@@ -12,3 +12,13 @@
 {"level":"error","message":"Cannot read properties of undefined (reading 'products')"}
 {"level":"error","message":"Cannot access 'result' before initialization"}
 {"level":"error","message":"Cannot access 'cartToCreate' before initialization"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'id')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'title')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading 'title')"}
+{"level":"error","message":"Cannot read properties of null (reading 'title')"}
+{"level":"error","message":"Cannot read properties of null (reading 'title')"}
+{"level":"error","message":"Cannot read properties of null (reading 'title')"}
+{"level":"error","message":"Cannot read properties of null (reading 'title')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'toString')"}

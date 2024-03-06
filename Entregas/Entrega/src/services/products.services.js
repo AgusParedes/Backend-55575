@@ -3,7 +3,8 @@ import ProductRepository from "../repositories/product.reposity.js"
 import { productsModel } from '../dao/dbManagers/models/product.model.js'
 import CustomError from '../Errors/CustomError.js';
 import EErrors from '../Errors/enums.js';
-
+import { sendEmail } from "./mail.service.js";
+import { deletedProductHTML } from '../utils/deleteProduct.html.js'
 const productDao = new Products();
 const productRepository = new ProductRepository(productDao);
 
@@ -78,8 +79,26 @@ const DeleteProduct = async (pid) => {
 
 const getAllProducts = async () => {
       const products = productRepository.getAllProducts()
-      return  products 
+      return products 
    }
+
+const sendEmailDeleteUser = async (email, productId) => {
+   const product = await productRepository.getProductById(productId)
+   try {
+         const ProductName = product.title
+         const emailInvalidCredentials = {
+            to: email,
+            subject: 'Eliminacion de producto',
+            html: deletedProductHTML.replace('{{ProductName}}', ProductName)
+         };
+         await sendEmail(emailInvalidCredentials);
+         console.log('Correo electrónico avisando de eliminacion del producto a:', email);
+   } catch (error) {
+      console.error('Error al enviar el correo electrónico:', error);
+      throw error;
+   }
+};
+
 export {
    GetInfoPages,
    RenderProductsWithQuerys,
@@ -87,5 +106,6 @@ export {
    NewProduct,
    EditProduct,
    DeleteProduct,
-   getAllProducts
+   getAllProducts,
+   sendEmailDeleteUser
 }

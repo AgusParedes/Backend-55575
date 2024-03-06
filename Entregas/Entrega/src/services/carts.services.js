@@ -2,7 +2,11 @@ import Carts from "../dao/dbManagers/carts.manager.js";
 import CartRepository from "../repositories/cart.repository.js";
 import CustomError from '../Errors/CustomError.js';
 import EErrors from '../Errors/enums.js';
+import Products from '../dao/dbManagers/product.manager.js'
+import ProductRepository from "../repositories/product.reposity.js"
 
+const productDao = new Products();
+const productRepository = new ProductRepository(productDao);
 const cartDao = new Carts();
 const cartRepository = new CartRepository(cartDao)
 
@@ -31,14 +35,14 @@ const AddProductToCart = async (cartId, productId) => {
          })
       }
       const productIndexInCart = products.findIndex(product => 
-         product.product && product.product.toString() === productId.toString()
+         product._id.toString() === productId.toString()
       );
       console.log(productIndexInCart)
 
       if (productIndexInCart !== -1) {
          products[productIndexInCart].quantity++;
       } else {
-         products.push({ product: productId, quantity: 1 });
+         products.push({ _id: productId, quantity: 1 });
       }
       await cartRepository.updateCart(cartId, products);
 
@@ -121,18 +125,15 @@ const GetCartById = async (cartId) => {
          code: EErrors.CART_NOT_FOUND
       })
    }
-   const products = cart.products.map(products => ({
-      product: products.product._id, 
-      quantity: products.quantity,
-      title : products.product.title, 
-      description : products.product.description,
-      code : products.product.code,
-      price : products.product.price,
-      status : products.product.status,
-      stock : products.product.stock,
-      category : products.product.category,
-      thumbnail : products.product.thumbnail
-   }));
+   const products = await Promise.all(cart.products.map(async (productItem) => {
+      const product = await productRepository.getProductById(productItem._id);
+      return {
+          _id: product._id,
+          title: product.title,
+          price: product.price,
+          quantity: productItem.quantity
+      };
+  }));
    return products
 }
 

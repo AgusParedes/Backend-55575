@@ -32,6 +32,10 @@ const usersSchema = new mongoose.Schema({
    age: {
       type: Number,
       require: true,
+   },
+   last_connection: {
+      type: Date,
+      default: Date.now
    }
 });
 

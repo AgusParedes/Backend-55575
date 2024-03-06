@@ -1,0 +1,27 @@
+
+{{#each users}}
+   <div class="users">
+         <ul>
+            <li>first_name: {{this.first_name}}</li> 
+            <li>last_name: {{this.last_name}}</li>
+            <li>email: {{this.email}}</li>
+            <li>role: {{this.role}}</li>
+            <li>cart: {{this.cart}}</li>
+            <li>age: {{this.age}}</li>
+            <li>last_connection: {{this.last_connection}}</li>
+            <li>Id: {{this._id}}</li>
+            <li>
+               <form id="deleteForm_{{this._id}}" class="delete-form">
+                  <button type="submit" data-user-id="{{this._id}}">Eliminar</button>
+               </form>
+            </li>
+            <li>
+               <form id="changeRoleForm_{{this._id}}" class="change-role-form">
+                  <button type="submit" data-user-id="{{this._id}}">Cambiar Rol</button>
+               </form>
+            </li>
+         </ul>
+   </div>
+{{/each}}
+<script src="/js/deleteUser.js"></script>
+<script src="/js/changeRole.js"></script>

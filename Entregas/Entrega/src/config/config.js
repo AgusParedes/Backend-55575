@@ -2,7 +2,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-console.log('Valor de PRIVATE_KEY_JWT:', process.env.PRIVATE_KEY_JWT); // Agrega esta línea para imprimir el valor
 
 const configs = {
    port: process.env.PORT,

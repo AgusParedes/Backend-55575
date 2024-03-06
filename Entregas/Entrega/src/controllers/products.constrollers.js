@@ -4,9 +4,15 @@ import { GetInfoPages as GetInfoPagesService,
          NewProduct as NewProductService,
          EditProduct as EditProductService,
          DeleteProduct as DeleteProductService,
-         getAllProducts as getAllProductsService } from "../services/products.services.js";
+         getAllProducts as getAllProductsService,
+         sendEmailDeleteUser as sendEmailDeleteUserService} from "../services/products.services.js";
 import CustomError from '../Errors/CustomError.js';
 import EErrors from '../Errors/enums.js';
+import UserRepository from '../repositories/user.reposity.js';
+import Users from '../dao/dbManagers/users.manager.js';
+
+const userDao = new Users();
+const userRepository = new UserRepository(userDao);
 
 const RenderHome = async (req, res) => {
    try {
@@ -94,11 +100,14 @@ const DeleteProduct = async (req, res) => {
       const { pid } = req.params;
       const userRole = req.user.role;
       console.log(userRole)
+      const product = await GetByIdService(pid);
+      if(product.owner != "admin"){
+         await sendEmailDeleteUserService(product.owner, pid)
+      }
       if (userRole === 'admin') {
          const result = await DeleteProductService(pid)
          res.send({ status: 'success', payload: result });
       } else if (userRole === 'premium') {
-         const product = await GetByIdService(pid);
          if (product.owner === req.user.email) { 
             const result = await DeleteProductService(pid)
             res.send({ status: 'success', payload: result });

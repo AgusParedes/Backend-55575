@@ -3,6 +3,7 @@ import { Register as RegisterService,
          generateUsers as generateUsersService } from "../services/sessions.services.js";
 import CustomError from '../Errors/CustomError.js';
 import EErrors from '../Errors/enums.js';
+import { updateLastConnection } from "../services/user.service.js";
 
 const Register = async (req, res) => {
       const { first_name, last_name, age, role = "user", email, password } = req.body;
@@ -22,7 +23,9 @@ const Register = async (req, res) => {
 }
 
 const Login =  async (req, res) => {
+   try {
       const { email, password } = req.body;
+      console.log(req.user)
       if(!email || !password){
          throw CustomError.createError({
             name: 'UserError',
@@ -33,13 +36,25 @@ const Login =  async (req, res) => {
       }
       const accessToken = await LoginService(email, password)
       res.cookie('coderCookie', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true }).send({ status: 'success', message: 'login success' })
+   } catch (error) {
+      console.log(req.user)
+      res.status(500).send({ status: 'error', message: error.message });
+   }
 }
 
-const Logout = (req, res) => {
-   req.session.destroy(error => {
-      if(error) return res.status(500).send({ status: 'error', message: error.message });
-      res.redirect('/login');
-   })
+const Logout = async (req, res) => {
+   try {
+      const userId = req.user._id;
+      const lastConnection = new Date();
+      await updateLastConnection(userId, lastConnection);
+      req.session.destroy(error => {
+         if(error) return res.status(500).send({ status: 'error', message: error.message });
+         res.redirect('/login');
+      })
+   } catch (error) {
+      console.log(req.user)
+      res.status(500).send({ status: 'error', message: error.message });
+   }
 }
 
 const Github = async (req, res) => {

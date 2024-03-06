@@ -1,20 +1,17 @@
 <!-- cart.handlebars -->
 <h2>Carrito {{cartId}}</h2>
 
-<div style="display: flex; gap: 35px;">
+<div style="display: flex; gap: 35px; margin: 20px;">
    {{#each products}}
-   <div class="product">
-      <p>Producto: {{this.product}}</p>
-      <p>title : {{this.title}}
-      <p>description : {{this.description}}</p>
-      <p>code : {{this.code}}</p>
-      <p>price : {{this.price}}</p>
-      <p>status : {{this.status}}</p>
-      <p>stock : {{this.stock}}</p>
-      <p>category : {{this.category}}</p>
-      <p>thumbnail : {{this.thumbnail}}</p></p>
+   <div class="product" style="border: 1px solid #ccc; padding: 10px;">
+      <p>Producto: {{this.title}}</p>
+      <p>Precio: {{this.price}}</p>
       <p>Cantidad: {{this.quantity}}</p>
+      <p>id: {{this._id}}</p>
    </div>
    {{/each}}
 </div>
+<form action="" method="">
+      <button type="submit">Terminar compra</button>
+</form>
 
