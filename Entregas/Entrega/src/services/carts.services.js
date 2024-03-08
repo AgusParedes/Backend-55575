@@ -128,12 +128,12 @@ const GetCartById = async (cartId) => {
    const products = await Promise.all(cart.products.map(async (productItem) => {
       const product = await productRepository.getProductById(productItem._id);
       return {
-          _id: product._id,
-          title: product.title,
-          price: product.price,
-          quantity: productItem.quantity
+         _id: product._id,
+         title: product.title,
+         price: product.price,
+         quantity: productItem.quantity
       };
-  }));
+}));
    return products
 }
 

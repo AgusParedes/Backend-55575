@@ -5,7 +5,7 @@ export default class CartRepository {
       this.dao = dao;
    }
 
-   getCart = async() => {
+   getCarts = async() => {
       const result = await this.dao.getAll();
       return result;
    }
