@@ -11,8 +11,6 @@ import EErrors from '../Errors/enums.js';
 import UserRepository from '../repositories/user.reposity.js';
 import Users from '../dao/dbManagers/users.manager.js';
 
-const userDao = new Users();
-const userRepository = new UserRepository(userDao);
 
 const RenderHome = async (req, res) => {
    try {

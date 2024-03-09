@@ -1,8 +1,9 @@
 import Router from "express";
-import { CreatePaymentIntent } from "../controllers/payment.controller.js"
+import { CreatePaymentIntent, RenderPaymentIntent } from "../controllers/payment.controller.js"
 
 const router = Router();
 
-router.get('/payment-intent', CreatePaymentIntent );
+router.get('/payment-intent', RenderPaymentIntent );
+router.post('/ProcesToPay', CreatePaymentIntent );
 
 export default router;
