@@ -11,5 +11,5 @@ const configs = {
    userNodemailer: process.env.USER_NODEMAILER,
    passwordNodemailer: process.env.PASSWORD_NODEMAILER
 };
-
 export default configs;
+

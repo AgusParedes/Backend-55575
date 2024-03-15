@@ -37,7 +37,6 @@ app.use(cookieParser());
 app.engine('handlebars', handlebars.engine())
 app.set('views', `${__dirname}/views`)
 app.set('view engine', 'handlebars')
-
 try {
    await mongoose.connect(configs.mongoUrl);
    console.log('DB connected');
