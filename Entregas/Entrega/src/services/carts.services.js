@@ -17,6 +17,8 @@ const CreateCart = async () => {
 
 const AddProductToCart = async (cartId, productId) => {
    const cart = await cartRepository.getCartById(cartId);
+   const product = await productRepository.getProductById(productId)      
+   const products = cart.products;
    if (!cart) {
       throw CustomError.createError({
          name: 'UserError',
@@ -25,7 +27,6 @@ const AddProductToCart = async (cartId, productId) => {
          code: EErrors.CART_NOT_FOUND
       })
    }
-      const products = cart.products;
       if (!products) {
          throw CustomError.createError({
             name: 'UserError',
@@ -37,6 +38,16 @@ const AddProductToCart = async (cartId, productId) => {
       const productIndexInCart = products.findIndex(product => 
          product._id.toString() === productId.toString()
       );
+      const productInCart = products.find(product => product._id.toString() === productId.toString());
+      
+      if (productInCart && productInCart.quantity + 1 > product.stock) {
+         throw CustomError.createError({
+            name: 'CartError',
+            cause: 'Exceeded stock',
+            message: 'Quantity exceeds product stock',
+            code: EErrors.EXCEEDED_STOCK
+         });
+      }
       console.log(productIndexInCart)
 
       if (productIndexInCart !== -1) {

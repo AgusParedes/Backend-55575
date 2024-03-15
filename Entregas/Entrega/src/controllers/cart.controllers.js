@@ -38,8 +38,12 @@ const AddProductToCart = async (req, res) => {
       const cart = await AddProductToCartService(cartId, productId);
       res.send({ payload: cart });
    } catch (error) {
-      res.status(500).send({ error: error.message });
-      req.logger.error(error.message);
+      if (error.code === EErrors.EXCEEDED_STOCK) {
+         res.status(400).send({ error: error.message });
+      } else {
+         res.status(500).send({ error: error.message });
+         req.logger.error(error.message);
+      }
    }
 };
 

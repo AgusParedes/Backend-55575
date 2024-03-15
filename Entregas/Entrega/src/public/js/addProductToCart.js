@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
       form.addEventListener('submit', async function(event) {
          event.preventDefault();
 
-         // Obtener la URL de acción del formulario
          const url = this.action;
 
          try {
@@ -19,7 +18,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (response.ok) {
                alert('El producto se agregó al carrito correctamente.');
             } else {
-               alert('Hubo un error al agregar el producto al carrito.');
+               if (response.status === 400) {
+                  alert('Se ha excedido el límite de stock del producto.');
+               } else {
+                  alert('Hubo un error al agregar el producto al carrito.');
+               }
             }
          } catch (error) {
             console.error('Error:', error);

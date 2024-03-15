@@ -15,6 +15,6 @@ router.put('/:cid', EditCart);
 router.put('/:cid/products/:pid', EditProductQuantity);
 router.get('/:cid', GetCartById);
 router.delete('/:cid', DeleteCart);
-router.post('/:cid/purchase', passportCall('jwt'),authorization('user'), processPurchase);
+router.post('/:cid/purchase', passportCall('jwt'),authorization('user', "premium"), processPurchase);
 
 export default router;

@@ -11,5 +11,9 @@
    </div>
    {{/each}}
 </div>
-<a href="/api/payments/payment-intent?id={{cartId}}"><button>Terminar Compra</button></a>
+<form action="http://localhost:8080/api/carts/{{cartId}}/purchase" method="post">
+   <button type="submit">Comprar</button>
+</form>
+<a href="/"><button>Volver</button></a>
 
+<script src="/js/Cart.js"></script>

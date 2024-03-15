@@ -24,7 +24,6 @@ import resetPasswordRouter from './routes/resetPassword.router.js'
 import userRouter from './routes/user.router.js'
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express';
-import paymentRouter from './routes/payments.router.js'
 
 
 const app = express();
@@ -89,7 +88,6 @@ app.use('/loggerTest', loggerRouter)
 app.use('/api/reset-password', viewsresetPassword)
 app.use('/api/logic-reset', resetPasswordRouter)
 app.use('/api/users', userRouter)
-app.use('/api/payments', paymentRouter)
 app.use(errorHandler);
 
 

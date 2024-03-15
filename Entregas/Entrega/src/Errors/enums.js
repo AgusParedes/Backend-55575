@@ -6,8 +6,8 @@ const EErrors = {
    USER_NOT_FOUND: 5,
    PRODUCT_NOT_FOUND: 6,
    CART_NOT_FOUND:7,
-   PERMISSION_DENIED: 8
-   
+   PERMISSION_DENIED: 8,
+   EXCEEDED_STOCK:9
    
 }
 

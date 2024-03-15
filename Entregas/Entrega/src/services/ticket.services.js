@@ -15,8 +15,9 @@ const processPurchase = async (cartId, user) => {
    const cart = await cartRepository.getCartById(cartId);
 
    for (const cartProduct of cart.products) {
-      const productId = cartProduct.product;
+      const productId = cartProduct._id;
       const productInfo = await productRepository.getProductById(productId);
+      console.log(productId)
 
       if (productInfo && productInfo.stock >= cartProduct.quantity) {
          await productRepository.updateProduct(productId, {
@@ -43,14 +44,13 @@ const processPurchase = async (cartId, user) => {
          return total + productAmount;
       }, 0);
    };
-
-
    const updatedProducts = cart.products.filter(
-      (product) => !ProductosDisponibles.some((pd) => pd.product === product.product || pd.product === undefined)
+      (product) => ProductosDisponibles.some((pd) => pd._id === product._id)
    );
 
+
    if (ProductosDisponibles.length > 0) {
-   await cartRepository.updateCart(cart._id, { products: updatedProducts });
+      await cartRepository.updateCart(cart._id, updatedProducts);
    }
    const totalAmount = calculateTotalAmount(ProductosDisponibles);
    

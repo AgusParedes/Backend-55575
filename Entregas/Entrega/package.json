@@ -13,7 +13,7 @@
    "author": "",
    "license": "ISC",
    "dependencies": {
-      "@faker-js/faker": "^8.3.1",
+      "@faker-js/faker": "^8.4.1",
       "@stripe/stripe-js": "^3.0.7",
       "async-express-decorator": "^1.1.0",
       "bcrypt": "^5.1.1",
@@ -24,6 +24,7 @@
       "express": "^4.18.2",
       "express-handlebars": "^7.1.2",
       "express-session": "^1.17.3",
+      "faker": "^6.6.6",
       "jsonwebtoken": "^9.0.2",
       "mongoose": "^7.6.3",
       "mongoose-paginate-v2": "^1.7.4",

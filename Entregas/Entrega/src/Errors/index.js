@@ -51,6 +51,13 @@ export default (error, req, res, next) => {
             description: error.cause
          });
          break;
+         case EErrors.EXCEEDED_STOCK:
+         res.status(400).send({
+            status: 'error',
+            error: error.name,
+            description: error.cause
+         });
+         break;
       default:
          res.status(500).send({
             status: 'error',

@@ -22,3 +22,23 @@
 {"level":"error","message":"Cannot read properties of null (reading 'title')"}
 {"level":"error","message":"Cannot read properties of null (reading 'title')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'toString')"}
+{"level":"error","message":"Cannot access 'products' before initialization"}
+{"level":"error","message":"Quantity exceeds product stock"}
+{"level":"error","message":"Quantity exceeds product stock"}
+{"level":"error","message":"Quantity exceeds product stock"}
+{"level":"error","message":"Quantity exceeds product stock"}
+{"level":"error","message":"Quantity exceeds product stock"}
+{"level":"error","message":"Quantity exceeds product stock"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"You are not allowed to add your own product to your cart"}
+{"level":"error","message":"You are not allowed to add your own product to your cart"}
+{"level":"error","message":"You are not allowed to add your own product to your cart"}
