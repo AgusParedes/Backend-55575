@@ -55,9 +55,6 @@ try {
 
 const numeroNucleos = cpus().length;
 console.log(numeroNucleos);
-console.log("__dirname",__dirname)
-console.log("__mainDirname", __mainDirname)
-console.log("__filename", __filename)
 initializePassport();
 
 const swaggerOptions = {
