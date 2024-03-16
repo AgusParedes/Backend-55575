@@ -5,6 +5,7 @@ const Register = async (req, res) => {
       res.render('register');
    } catch (error) {
       res.status(500).json({ status: 'error', message: 'Error al renderizar la vista de registro: ' + error.message });
+      
    }
 }
 
@@ -13,6 +14,8 @@ const Login = async (req, res) => {
       res.render('login');
    } catch (error) {
       res.status(500).json({ status: 'error', message: 'Error al renderizar la vista de inicio de sesión: ' + error.message });
+      console.log(error.message)
+      console.log(error)
    }
 }
 
