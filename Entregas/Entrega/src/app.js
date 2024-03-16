@@ -1,6 +1,6 @@
 import express from 'express';
 import handlebars from 'express-handlebars';
-import { __dirname, __mainDirname } from './utils.js';
+import { __dirname, __mainDirname, __filename  } from './utils.js';
 import { Server } from 'socket.io';
 import productsRouter from './routes/products.router.js'
 import cartsRouter from './routes/carts.router.js';
@@ -55,7 +55,9 @@ try {
 
 const numeroNucleos = cpus().length;
 console.log(numeroNucleos);
-
+console.log("__dirname",__dirname)
+console.log("__mainDirname", __mainDirname)
+console.log("__filename", __filename)
 initializePassport();
 
 const swaggerOptions = {

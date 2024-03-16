@@ -95,4 +95,5 @@ const addLogger = (req, res, next) => {
       authorization,
       addLogger,
       __mainDirname,
+      __filename
    } 
