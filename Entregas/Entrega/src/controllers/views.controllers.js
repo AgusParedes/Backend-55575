@@ -1,11 +1,19 @@
 import { RenderHome as RenderHomeService } from "../services/views.services.js" 
 
 const Register = async (req, res) => {
-   res.render('register')
+   try {
+      res.render('register');
+   } catch (error) {
+      res.status(500).json({ status: 'error', message: 'Error al renderizar la vista de registro: ' + error.message });
+   }
 }
 
 const Login = async (req, res) => {
-   res.render('login')
+   try {
+      res.render('login');
+   } catch (error) {
+      res.status(500).json({ status: 'error', message: 'Error al renderizar la vista de inicio de sesión: ' + error.message });
+   }
 }
 
 const RenderHome = async (req, res) => {
