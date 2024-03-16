@@ -13,7 +13,7 @@ const Login = async (req, res) => {
    try {
       res.render('login');
    } catch (error) {
-      res.status(500).json({ status: 'error', message: 'Error al renderizar la vista de inicio de sesión: ' + error.message });
+      res.status(500).send({ status: 'error', message: 'Error al renderizar la vista de inicio de sesión: ' + error.message });
       console.log(error.message)
       console.log(error)
    }
