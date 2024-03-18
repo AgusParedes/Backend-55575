@@ -17,8 +17,8 @@ form.addEventListener('submit', e => {
    }).then(result => {
       console.log('Después de la llamada a fetch');
       if (result.status === 201) {
-         console.log('Redirigiendo a /login');
-         window.location.replace('/login');
+         console.log('Redirigiendo a login');
+         window.location.replace('/');
       } else {
          console.log('Error en el servidor:', result.status);
          throw new Error('Error en el servidor: ' + result.status);

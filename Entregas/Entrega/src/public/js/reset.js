@@ -15,7 +15,7 @@ form.addEventListener('submit', e => {
    }).then(result => {
       if (result.status === 200) {
          console.log('Solicitud de restablecimiento de contraseña enviada correctamente');
-         window.location.replace('/login');
+         window.location.replace('/');
       } else if (result.status === 401) {
          console.log('Credenciales no válidas');
       } else {

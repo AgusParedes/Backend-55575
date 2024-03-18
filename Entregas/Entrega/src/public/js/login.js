@@ -15,7 +15,7 @@ form.addEventListener('submit', e => {
    }).then(result => {
       if (result.status === 200) {
          console.log('Login successful');
-         window.location.replace('/');
+         window.location.replace('/home');
       } else if (result.status === 401) {
          console.log('Invalid credentials');
       } else {

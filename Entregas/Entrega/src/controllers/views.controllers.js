@@ -10,9 +10,6 @@ const Login = async (req, res) => {
 
 
 const RenderHome = async (req, res) => {
-   if(!req.user){
-      return res.redirect('/login');
-   }
    try { 
       const limit = parseInt(req.query.limit) || 10;
       const page = parseInt(req.query.page) || 1;

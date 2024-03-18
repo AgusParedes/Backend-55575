@@ -20,7 +20,7 @@
             <p>owner: {{this.owner}}</p>
             <p>id: {{this._id}}</p>
             <p>
-               <form id="addToCartForm-{{this._id}}" action="http://localhost:8080/api/carts/{{../cartId}}/product/{{this._id}}" method="post">
+               <form id="addToCartForm-{{this._id}}" action="https://backend-55575-production.up.railway.app/api/carts/{{../cartId}}/product/{{this._id}}" method="post">
                   <button type="submit">Agregar al carrito</button>
                </form>
             </p>

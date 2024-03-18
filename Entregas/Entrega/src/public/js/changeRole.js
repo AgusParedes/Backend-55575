@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
          event.preventDefault();
          var userId = this.querySelector('button').getAttribute('data-user-id');
 
-         fetch('http://localhost:8080/api/users/premium/' + userId, {
+         fetch('https://backend-55575-production.up.railway.app/api/users/premium/' + userId, {
                method: 'PUT'
          })
             .then(function(response) {
