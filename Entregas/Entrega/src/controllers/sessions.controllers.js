@@ -49,7 +49,7 @@ const Logout = async (req, res) => {
       await updateLastConnection(userId, lastConnection);
       req.session.destroy(error => {
          if(error) return res.status(500).send({ status: 'error', message: error.message });
-         res.redirect('/login');
+         res.redirect('/');
       })
    } catch (error) {
       console.log(req.user)
